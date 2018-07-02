@@ -1,0 +1,110 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    dataBinding {
+        enabled = true
+    }
+    defaultConfig {
+        applicationId "com.android.daqsoft.androidbasics"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0.1"
+        multiDexEnabled = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildToolsVersion '26.0.2'
+    //区分不同项目
+    flavorDimensions "default"
+    productFlavors {
+        //赛里木
+        scenicspot_slm {
+            dimension "default"
+            versionCode 1
+            versionName "1.0.1"
+            applicationId "com.android.daqsoft.androidbasics"
+            manifestPlaceholders = [AMAP: "783dfb4f41eb8a9e104042d40c02290c"]//高德地图的key
+        }
+        //瓦屋山
+        scenicspot_wws {
+            dimension "default"
+            versionCode 1
+            versionName "1.0.1"
+            applicationId "com.android.wws.androidbasics"
+            manifestPlaceholders = [AMAP: "fa38317b9135cd7e63b680a8b01f3ce3"]//高德地图的key
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("CommonScenicSpot.jks")
+            storePassword "daqsoft"
+            keyAlias "daqsoft"
+            keyPassword "daqsoft"
+        }
+        release {
+            storeFile file("CommonScenicSpot.jks")
+            storePassword "daqsoft"
+            keyAlias "daqsoft"
+            keyPassword "daqsoft"
+        }
+    }
+
+
+}
+
+dependencies {
+    compile 'com.android.support:multidex:1.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //fagment框架
+    compile 'me.yokeyword:fragmentation:1.3.3'
+    // Activity作用域的EventBus，更安全，可有效避免after onSavenInstanceState()异常
+    compile 'me.yokeyword:eventbus-activity-scope:1.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //butternife AS3.0配置
+    api(rootProject.ext.dependencies["butterknife"]) {
+        exclude module: 'support-annotations'
+    }
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'support-annotations'
+    }
+    implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["cardview-v7"]
+    //最新版本
+    implementation project(':banner')
+    //图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.2'
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    compile 'com.alibaba:fastjson:1.2.46'
+    implementation project(':library')
+    compile 'com.lovedise:permissiongen:0.0.6'
+    implementation project(':multi-image-selector')
+    implementation project(':shape_imageview_library')
+    //万能适配器
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    implementation project(':PhotoView_library')
+    implementation project(':viewPagerIndicator_library')
+    //微信
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+    compile 'org.jsoup:jsoup:1.10.1'
+    //必须使用
+    compile 'com.zhy:okhttputils:2.6.2'
+    compile 'com.google.code.gson:gson:2.2.4'
+}

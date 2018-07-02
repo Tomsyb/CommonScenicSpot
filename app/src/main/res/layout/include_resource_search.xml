@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_line"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.android.daqsoft.androidbasics.view.CenterDrawableEdittext
+        android:id="@+id/include_et_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1"
+        android:background="@drawable/f_white_half_round"
+        android:gravity="center"
+        android:hint="@string/search_hint"
+        android:textCursorDrawable="@null"
+        android:textColorHint="@color/gray"
+        android:drawableLeft="@mipmap/icon_search"
+        android:imeOptions="actionSearch"
+        android:padding="10dp"
+        android:inputType="text"
+        android:textSize="12sp"
+        android:drawablePadding="10dp"/>
+
+
+</LinearLayout>

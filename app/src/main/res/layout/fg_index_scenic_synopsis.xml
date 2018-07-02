@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+        <ImageView
+            android:scaleType="fitXY"
+            android:id="@+id/img_scenic_synopsis_top"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+        <ImageView
+            android:layout_marginTop="18dp"
+            android:id="@+id/img_scenic_synopsis_back"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="18dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="景区简介"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:text="飞机费时间佛文件费附加文件发放金额"
+        android:id="@+id/img_scenic_synopsis_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

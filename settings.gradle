@@ -1,0 +1,1 @@
+include ':app', ':banner', ':library', ':multi-image-selector', ':shape_imageview_library', ':PhotoView_library', ':viewPagerIndicator_library'

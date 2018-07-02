@@ -1,0 +1,61 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="bottombar_height">52dp</dimen>
+    <dimen name="statsbar">13dp</dimen>
+
+    <dimen name="title_height">58dp</dimen>
+    <dimen name="title_button_size">45dp</dimen>
+    <dimen name="title_size">18sp</dimen>
+    <dimen name="chat_headimg_size">50dp</dimen>
+    <dimen name="chat_margin_size">30dp</dimen>
+    <dimen name="chat_text_size">12sp</dimen>
+    <dimen name="txt_16">16sp</dimen>
+    <dimen name="txt_14">14sp</dimen>
+    <dimen name="txt_12">12sp</dimen>
+    <dimen name="padding_6">6dp</dimen>
+    <dimen name="padding_3">3dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="title_58">58dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_6">6dp</dimen>
+    <dimen name="margin_7">7dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_9">9dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_11">11dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_18">18dp</dimen>
+    <dimen name="width_40">40dp</dimen>
+    <dimen name="txt_18">18sp</dimen>
+    <dimen name="txt_20">20sp</dimen>
+    <dimen name="txt_25">25sp</dimen>
+    <dimen name="size_30">30dp</dimen>
+    <dimen name="txt_15">15sp</dimen>
+    <dimen name="txt_13">13sp</dimen>
+    <dimen name="txt_22">22sp</dimen>
+    <dimen name="width_50">42dp</dimen>
+    <dimen name="txt_10">10sp</dimen>
+    <dimen name="txt_11">11sp</dimen>
+    <dimen name="width_35">35dp</dimen>
+    <dimen name="txt_9">9sp</dimen>
+
+    <dimen name="dimen_margin_circle">4dp</dimen>
+    <dimen name="dimen_margin_circle.negative">-4dp</dimen>
+
+    <dimen name="calendar_day_headers_paddingbottom">4dp</dimen>
+    <dimen name="calendar_month_topmargin">16dp</dimen>
+    <dimen name="calendar_month_title_bottommargin">4dp</dimen>
+    <dimen name="calendar_text_medium">18sp</dimen>
+    <dimen name="calendar_text_small">14sp</dimen>
+    <dimen name="list_logo_size">80dp</dimen>
+</resources>

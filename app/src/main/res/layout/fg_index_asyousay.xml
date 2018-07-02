@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/index_asyousay_rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+            <ImageView
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_img_defalt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <!--<com.youth.banner.Banner-->
+                <!--app:bottom_height="20dp"-->
+                <!--android:id="@+id/index_asyousay_banner"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
+            <ImageView
+                android:layout_marginTop="18dp"
+                android:id="@+id/index_sayousay_back"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/transparent"
+            android:id="@+id/index_sayousay_rv"
+            android:layout_marginTop="-25dp"
+            android:layout_below="@+id/index_asyousay_rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+</ScrollView>

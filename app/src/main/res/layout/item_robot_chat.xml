@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/chat_margin_size"
+    android:background="@android:color/transparent"
+    android:gravity="top"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/item_robot_chat_iv_robot"
+        android:layout_width="@dimen/chat_headimg_size"
+        android:layout_height="@dimen/chat_headimg_size"
+        android:layout_marginRight="5dp"
+        android:src="@mipmap/mine_head_default" />
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_robot"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_robot_chat_tv_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="主人，我是小花，"
+            android:textSize="@dimen/chat_text_size" />
+
+        <LinearLayout
+            android:id="@+id/layout_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="50dp">
+
+            <TextView
+                android:id="@+id/item_robot_tv_go"
+                style="@style/robot_chat_button"
+                android:text="导航去" />
+
+            <TextView
+                android:id="@+id/item_robot_tv_call"
+                style="@style/robot_chat_button"
+                android:text="打电话" />
+
+            <TextView
+                android:id="@+id/item_robot_tv_720"
+                style="@style/robot_chat_button"
+                android:text="720" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_robot_tv_detail"
+            style="@style/robot_chat_button"
+            android:text="详情"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/item_robot_chat_ll_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/select_gray" />
+
+            <TextView
+                android:id="@+id/item_robot_chat_tv_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/arror_right"
+                android:gravity="center_vertical"
+                android:text="了解详情"
+                android:textColor="@color/text_gray" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

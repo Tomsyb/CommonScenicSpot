@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/item_common_ll"
+    android:layout_marginTop="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:padding="10dp"
+        android:background="@drawable/bg_cicle_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/item_common_img"
+            android:src="@drawable/home_entrance_camera"
+            android:layout_width="23dp"
+            android:layout_height="23dp"/>
+    </LinearLayout>
+    <TextView
+        android:textSize="@dimen/txt_12"
+        android:layout_marginTop="5dp"
+        android:id="@+id/item_common_tv"
+        android:textColor="@color/white"
+        android:text="景区简介"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

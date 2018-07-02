@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/chat_margin_size"
+    android:gravity="top|right"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/item_robot_chat_tv_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_me"
+        android:gravity="center_vertical"
+        android:text="kdfkkdfkdkkf"
+        android:textColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/item_robot_chat_iv_me"
+        android:layout_width="@dimen/chat_headimg_size"
+        android:layout_height="@dimen/chat_headimg_size"
+        android:layout_marginLeft="5dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/mine_head_default" />
+</LinearLayout>

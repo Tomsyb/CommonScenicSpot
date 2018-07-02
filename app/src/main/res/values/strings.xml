@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">AndroidBasics</string>
+    <string name="press_again_exit">再按一次退出程序</string>
+
+
+    <string name="home">首页</string>
+    <string name="service">预订服务</string>
+    <string name="guide">导游导览</string>
+    <string name="mine">我的</string>
+
+    <string name="search_hint">输入搜索</string>
+
+    <!--首页部分文字-->
+    <string name="index_title">首页</string>
+
+    <string-array name="index_yiqi">
+        <item>GM-4磁通门磁力仪</item>
+        <item>ZD8B地电仪</item>
+        <item>ZD9A地电场仪</item>
+        <item>GM-4磁通门磁力仪</item>
+        <item>GM-4磁通门磁力仪</item>
+    </string-array>
+    <!--分类标签-->
+    <string-array name="index_content">
+        <item>地磁、相对观测</item>
+        <item>地电、大地电场</item>
+        <item>地电、地电阻率</item>
+        <item>地磁、相对观测</item>
+        <item>地磁、相对观测</item>
+    </string-array>
+
+    <string-array name="index_zhantai">
+        <item>成都地震基准台</item>
+        <item>成都地震基准台</item>
+        <item>成都地震基准台</item>
+        <item>崇州地震台</item>
+        <item>崇州地震台</item>
+    </string-array>
+    <string-array name="index_fenxiang">
+        <item>H、D、Z</item>
+        <item>地电场</item>
+        <item>电阻率</item>
+        <item>H、D、Z</item>
+        <item>H、D、Z</item>
+    </string-array>
+
+</resources>

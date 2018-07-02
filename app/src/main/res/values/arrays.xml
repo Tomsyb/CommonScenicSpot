@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="banner_url">
+        <item>http://ww4.sinaimg.cn/large/006uZZy8jw1faic1xjab4j30ci08cjrv.jpg</item>
+        <item>http://ww4.sinaimg.cn/large/006uZZy8jw1faic21363tj30ci08ct96.jpg</item>
+        <item>http://ww4.sinaimg.cn/large/006uZZy8jw1faic259ohaj30ci08c74r.jpg</item>
+        <item>http://ww4.sinaimg.cn/large/006uZZy8jw1faic2b16zuj30ci08cwf4.jpg</item>
+        <item>http://ww4.sinaimg.cn/large/006uZZy8jw1faic2e7vsaj30ci08cglz.jpg</item>
+    </array>
+
+    <array name="title">
+        <item>51巅峰钜惠</item>
+        <item>十大星级品牌联盟，全场2折起</item>
+        <item>生命不是要超越别人，而是要超越自己。</item>
+        <item>己所不欲，勿施于人。——孔子</item>
+        <item>嗨购5折不要停</item>
+    </array>
+
+    <!--首页的菜单-->
+    <array name="index_menu">
+        <item>维修纪实</item>
+        <item>维修历史</item>
+        <item>性能参数</item>
+        <item>联通测试</item>
+        <item>实时曲线</item>
+        <item>观察环境</item>
+        <item>仪器图件</item>
+        <item>更多</item>
+    </array>
+    <!--了解景区的菜单-->
+    <array name="index_scenic_menu">
+        <item>景区简介</item>
+        <item>游览须知</item>
+        <item>票务政策</item>
+        <item>开放时间</item>
+        <item>景区交通</item>
+        <item>景区文化</item>
+        <item>景区公告</item>
+        <item>游玩攻略</item>
+        <item>民风民俗</item>
+        <item>FQA专区</item>
+        <item>景区画册</item>
+        <item>宣传视频</item>
+    </array>
+
+
+
+</resources>

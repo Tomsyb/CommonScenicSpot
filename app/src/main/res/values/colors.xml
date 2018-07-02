@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="tagDark">#FF4081</color>
+    <color name="tagLight">#b1c914</color>
+    <color name="grey"> #ebebeb</color>
+    <color name="tab_unselect">#c9c9c9</color>
+    <color name="red">#FF4040</color>
+    <color name="control_bar_bg">#77000000</color>
+    <color name="white"> #FFFFFF</color>
+    <color name="gray_line">#e2e2e2</color>
+    <color name="main">#16A0FF</color>
+    <color name="main_gray">#F5F5F5</color>
+    <color name="index_menu_01">#FDF9ED</color>
+    <color name="select_gray">#f2f2f2</color>
+    <color name="robot_type_gray">#F2F2F2</color>
+    <color name="txt_black_gray">#666666</color>
+    <color name="index_menu_02">#FFF0F1</color>
+    <color name="index_menu_03">#E4FEF1</color>
+    <color name="black">#ff000000</color>
+    <color name="index_menu_04">#F5F3FE</color>
+    <color name="text">#626162</color>
+    <color name="text_gray">#959595</color>
+    <color name="txt_gray">#999999</color>
+    <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
+    <drawable name="white">#ffffffff</drawable>
+    <!-- 介于纯黑色和浅黑色之间 -->
+    <color name="middleBlack">#272727</color>
+    <!--服务页面-->
+    <color name="serve_list01_left">#3E8BF3</color>
+    <color name="serve_list01_right">#0DD5F6</color>
+    <color name="transparent">#00000000</color>
+    <color name="bg_gray">#F3F3F3</color>
+    <color name="gray">#D9D9D9</color>
+    <color name="orange">#FFB000</color>
+    <color name="green">#8BB75E</color>
+    <color name="main_green">#0AB302</color>
+    <color name="green1">#1AB45E</color>
+    <color name="blue">#5A90B2</color>
+    <color name="bg_blue">#279CE9</color>
+    <!-- 浅灰色 -->
+    <color name="lowgrey">#F2F2F2</color>
+    <!-- 深灰色 -->
+    <color name="darkgrey">#848484</color>
+    <!-- 半透明 -->
+    <color name="translucent">#7f000000</color>
+
+</resources>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ViewAnimator
+        android:id="@+id/animator_mine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/fg_mine"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/personal_wechatlogin_banner">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/personal_wechatlogin_banner_logo" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="-30dp"
+                android:background="@drawable/bg_cicle_solid_green"
+                android:gravity="center"
+                android:padding="15dp">
+
+                <ImageView
+                    android:id="@+id/fg_mine_img_chat"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/personal_wechatlogin_wechatlogo" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/fg_mine_img_chat"
+                android:layout_marginTop="@dimen/margin_5"
+                android:gravity="center"
+                android:padding="@dimen/margin_5"
+                android:text="使用微信账号授权登录"
+                android:textColor="@color/text"
+                android:textSize="@dimen/txt_16" />
+
+
+            <com.android.daqsoft.androidbasics.view.suppertext.SuperTextView
+                android:id="@+id/fg_mine_qure"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="50dp"
+                app:sCenterTextColor="@color/white"
+                app:sCenterTextString="确认登录"
+                app:sShapeCornersRadius="5dp"
+                app:sShapeSelectorNormalColor="@color/main_green"
+                app:sShapeSelectorPressedColor="@color/gray"
+                app:sUseShape="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/include_title_main"/>
+
+            <WebView
+                android:id="@+id/webView_mine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+    </ViewAnimator>
+</LinearLayout>

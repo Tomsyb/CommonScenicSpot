@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/item_bigimg_ll"
+        android:padding="@dimen/margin_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:background="@drawable/bg_common_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/item_bigimg_img_main"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_img_defalt"/>
+            <LinearLayout
+                android:layout_marginLeft="@dimen/margin_10"
+                android:gravity="center"
+                android:background="@drawable/bg_rec_orange_5"
+                android:layout_width="90dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/bihimg_tv_data"
+                    android:textSize="@dimen/txt_16"
+                    android:text="13"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:layout_marginTop="@dimen/margin_5"/>
+                <LinearLayout
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/bihimg_tv_year"
+                        android:textSize="@dimen/txt_11"
+                        android:text="13"
+                        android:textColor="@color/white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/bihimg_tv_mouth"
+                        android:textSize="@dimen/txt_11"
+                        android:text="13"
+                        android:textColor="@color/white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_tuijain"
+                    android:layout_marginRight="3dp"
+                    android:padding="3dp"
+                    android:text="推荐"
+                    android:background="@drawable/shape_blue_rectangle_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/main"/>
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/item_bigimg_tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="标题"
+                    android:textColor="@color/text"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:lines="2"
+                android:ellipsize="end"
+                android:id="@+id/item_bigimg_tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="内容"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/spot_strategy_icon_like"/>
+            <TextView
+                android:textSize="11sp"
+                android:id="@+id/bigima_tv_givePoint"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"/>
+
+
+            <ImageView
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/spot_strategy_icon_collect"/>
+            <TextView
+                android:textSize="11sp"
+                android:id="@+id/bigima_tv_collection"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"/>
+
+
+            <ImageView
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/spot_strategy_icon_comment"/>
+            <TextView
+                android:textSize="11sp"
+                android:id="@+id/bigima_tv_viewCount"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"/>
+        </LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/include_space_10"/>
+
+</LinearLayout>

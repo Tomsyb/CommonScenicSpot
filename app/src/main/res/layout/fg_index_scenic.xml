@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/spot_pic_bg"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_marginTop="18dp"
+        android:id="@+id/index_scenic_img_back"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_white_24dp"/>
+
+    <TextView
+        android:id="@+id/title_yanb"
+        android:layout_marginTop="@dimen/margin_20"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="--"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:padding="@dimen/margin_10"
+        android:gravity="center_vertical"
+        android:background="@drawable/shape_white_rectangle_50_trastant"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/spot_news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_marginLeft="@dimen/margin_5"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <com.android.daqsoft.androidbasics.view.RxTextViewVertical
+            android:layout_marginLeft="@dimen/margin_10"
+            android:id="@+id/run_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_marginRight="@dimen/margin_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_more_white"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="45dp"
+        android:id="@+id/fg_index_scenic_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

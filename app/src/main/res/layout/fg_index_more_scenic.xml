@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <ViewAnimator
+        android:id="@+id/more_animator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/more_sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <RelativeLayout
+                        android:id="@+id/index_more_rl_top"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp">
+                        <ImageView
+                            android:id="@+id/more_img"
+                            android:scaleType="fitXY"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <ImageView
+                            android:layout_marginTop="18dp"
+                            android:id="@+id/index_more_back"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_arrow_back_white_24dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:background="@color/transparent"
+                        android:id="@+id/index_more_rv"
+                        android:layout_marginTop="-25dp"
+                        android:layout_below="@+id/index_more_rl_top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+            </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <include layout="@layout/include_nodata"/>
+    </ViewAnimator>
+
+</LinearLayout>

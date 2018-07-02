@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/main_gray"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+   <include layout="@layout/include_title_main"/>
+   <ViewAnimator
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/gonggao_viewanimator">
+      <android.support.v4.widget.SwipeRefreshLayout
+          android:id="@+id/gongg_swresh"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+         <android.support.v7.widget.RecyclerView
+             android:id="@+id/gongl_rv"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+         </android.support.v7.widget.RecyclerView>
+      </android.support.v4.widget.SwipeRefreshLayout>
+      <include layout="@layout/include_nodata"/>
+   </ViewAnimator>
+
+
+</LinearLayout>
