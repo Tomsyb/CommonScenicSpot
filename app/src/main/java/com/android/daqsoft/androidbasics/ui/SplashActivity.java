@@ -55,7 +55,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                ActivityUtils.startActivity(MainActivity.class);
+                ActivityUtils.startActivity(LoginsActivity.class);
                 finish();
             }
 

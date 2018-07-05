@@ -87,6 +87,7 @@ public class IndexScenicFragment extends BaseFragment {
         mRunText.setOnItemClickListener(new RxTextViewVertical.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+
             }
         });
 
