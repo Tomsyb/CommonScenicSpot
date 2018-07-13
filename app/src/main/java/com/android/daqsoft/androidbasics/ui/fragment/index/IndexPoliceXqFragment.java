@@ -70,24 +70,12 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
     TextView mTvTitle;
     @BindView(R.id.exception_et)
     EditText mReportEt;
-    @BindView(R.id.police_xq_img_video)
-    ImageView mVideo;
-    @BindView(R.id.police_xq_img_audio)
-    ImageView mAudio;
     @BindView(R.id.fg_mine_qure)
     SuperTextView mQure;
     @BindView(R.id.police_route)
     LinearLayout mLlRoute;
-    @BindView(R.id.police_tv_audio)
-    TextView mTvaudio;
-    @BindView(R.id.police_xq_img_video2)
-    ImageView mImgPicture;
-    @BindView(R.id.rl_picture)
-    LinearLayout mRlPicture;
     @BindView(R.id.exception_gridView)
     MyGridView exception_gridView;
-    @BindView(R.id.myView)
-    View myView;
 
     public PopupWindow videoPopupWindow;//视屏
     public PopupWindow audioPopupWindow;//音频
@@ -100,31 +88,9 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
     public AnimationDrawable animationDrawable = null;
     private int audioFirst = 0;//判断是否是第一次点击录制音频
     private File audioFile = null;
-    private TestTimerTask task;
     private int i = 0;
     public TextView tvAudioAnim = null;
     private ChoicePopupWindow popupWindow;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                i++;
-                if (i < 120) {
-                    tvAudioAnim.setText("时长: " + i + "″");
-
-                } else {
-                    if (audioRecordPopupWindow.isShowing()) {
-                        animationDrawable.stop();
-                        audioRecordPopupWindow.dismiss();
-                    }
-                    recordTask.setRecording(false);
-                    mTvaudio.setText("播放");
-                    audioState = true;
-                    ToastUtils.showToast("录制音频最大时长2分钟");
-                }
-            }
-        }
-    };
 
     //单列
     public static IndexPoliceXqFragment newInstance() {
@@ -159,7 +125,6 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
                 HashMap<String, String> clickMap = allListPic.get(i);
                 if (clickMap.get("itemImage").equals(defult)) {
                     popupWindow.showAtLocation(exception_gridView, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                    myView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -167,7 +132,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                myView.setVisibility(View.GONE);
+
             }
         });
     }
@@ -179,17 +144,6 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         return R.layout.fg_index_police_xq;
     }
 
-
-    //--
-    public class TestTimerTask extends TimerTask {
-
-        public void run() {
-            //每次需要执行的代码放到这里面。
-            Message message = new Message();
-            message.what = 1;
-            handler.sendMessage(message);
-        }
-    }
     /**
      * 拍照
      */
@@ -208,7 +162,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             choicePicture(5 - allListPic.size(), MODE_MULTI);
         }
     };
-    @OnClick({R.id.include_img_back, R.id.police_xq_img_video, R.id.police_xq_img_audio, R.id.fg_mine_qure})
+    @OnClick({R.id.include_img_back, R.id.fg_mine_qure})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.include_img_back:
@@ -218,45 +172,6 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
                     audioRecordPopupWindow.dismiss();
                 }
                 RecordMedia.stop();
-                break;
-            case R.id.police_xq_img_video:
-                ToastUtils.showToast("待开发...");
-                break;
-            case R.id.police_xq_img_audio://点击录音
-                if (!audioState){
-                    try {
-                        if (audioFirst == 0) {//第一次点击
-                            mTvaudio.setText("暂停");
-                            audioFirst++;
-                            timer = new Timer();
-                            task = new TestTimerTask();
-                            timer.schedule(task, 1000, 1000);
-                            showAudioRecordPopupWindow(mAudio);
-                            audioFile = RecordMedia.init(getActivity());
-                        } else {//第二次点击
-                            audioFirst = 0;
-                            if (ObjectUtils.isNotEmpty(audioRecordPopupWindow)) {
-                                if (audioRecordPopupWindow.isShowing()) {
-                                    animationDrawable.stop();
-                                    audioRecordPopupWindow.dismiss();
-                                }
-                            }
-                            //recordTask.setRecording(false);
-                            RecordMedia.stop();
-                            mTvaudio.setText("预览");
-                            audioState = true;
-                            if (timer != null) {
-                                timer.cancel();
-                                timer = null;
-                            }
-                            i = 0;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    showAudioPopupWindow(mAudio);
-                }
                 break;
             case R.id.fg_mine_qure://点击上报
                 ToastUtils.showToast("上报成功");
@@ -301,108 +216,6 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         }*/
         startActivityForResult(intent, Constant.REQUEST_IMAGE);
 
-    }
-
-    //-----------------------------------------------------------------------------------下面是弹窗
-    /**
-     * 显示录音动画
-     * @param v
-     */
-    public void showAudioRecordPopupWindow(View v) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.activity_audio_anim, null);
-        tvAudioAnim = (TextView) view.findViewById(R.id.tv_audio_anim);
-        ImageView ivAudioAnim = (ImageView) view.findViewById(R.id.iv_audio_anim);
-        ivAudioAnim.setBackgroundResource(R.drawable.audio_anim_list);
-        animationDrawable = (AnimationDrawable) ivAudioAnim.getBackground();
-        audioRecordPopupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        audioRecordPopupWindow.setFocusable(false);
-
-        audioRecordPopupWindow.setTouchable(false);
-        audioRecordPopupWindow.setOutsideTouchable(false);
-
-        audioRecordPopupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.white));
-        // 设置好参数之后再show
-        audioRecordPopupWindow.showAtLocation(view, Gravity.CENTER, 0, -50);
-        animationDrawable.start();
-    }
-
-    /**
-     * 音频操作弹窗
-     * @param v
-     */
-    public void showAudioPopupWindow(View v) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.activity_audio_click, null);
-        Button btnPlay = (Button) view.findViewById(R.id.btn_play_audio);
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-                if (ObjectUtils.isNotEmpty(audioFile) && audioFile.exists()) {
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    try {
-                        mediaPlayer
-                                .setDataSource(audioFile.getPath());
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                    } catch (IOException e) {
-                        ToastUtils.showToast("该音频已损坏，无法播放");
-                    }
-
-                    //调用系统
-//					Intent intent = new Intent();
-//					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//					intent.setAction(Intent.ACTION_VIEW);
-//        			/* 设置文件类型 */
-//					intent.setDataAndType(Uri.fromFile(audioFile), "audio");
-//					startActivity(intent);
-                    audioPopupWindow.dismiss();
-                } else {
-                    ToastUtils.showToast("音频播放异常，请稍后重试");
-                    audioPopupWindow.dismiss();
-                }
-            }
-        });
-        Button btnDelete = (Button) view.findViewById(R.id.btn_delete_audio);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ObjectUtils.isNotEmpty(audioFile) && audioFile.exists()) {
-                    if (audioFile.exists()) {
-                        audioFile.delete();
-                    }
-                }
-                audioFirst = 0;
-                audioState = false;
-                mTvaudio.setText("录音");
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-            }
-        });
-        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel_audio);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-            }
-        });
-        audioPopupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        audioPopupWindow.setFocusable(true);
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        audioPopupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.white));
-        // 设置好参数之后再show
-        audioPopupWindow.showAtLocation(view, Gravity.BOTTOM, 10, 10);
     }
 
     /**

@@ -18,14 +18,14 @@
 
     <!--首页的菜单-->
     <array name="index_menu">
-        <item>维修纪实</item>
-        <item>维修历史</item>
-        <item>性能参数</item>
-        <item>联通测试</item>
-        <item>实时曲线</item>
         <item>观察环境</item>
-        <item>仪器图件</item>
-        <item>更多</item>
+        <item>观察原理</item>
+        <item>仪器规范</item>
+        <item>网络测试</item>
+        <item>数据曲线</item>
+        <item>当前数据</item>
+        <item>故障上报</item>
+        <item>故障检索</item>
     </array>
     <!--了解景区的菜单-->
     <array name="index_scenic_menu">

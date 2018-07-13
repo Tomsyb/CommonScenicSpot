@@ -117,6 +117,7 @@ public class IndexScenicFragment extends BaseFragment {
                     public void onClick(View view) {
                         switch (position) {
                             case 0://景区简介
+                                start(IndexPoliceXqFragment.newInstance());
                                 ToastUtils.showToast("开发中...");
                                 break;
                             case 1://游览须知

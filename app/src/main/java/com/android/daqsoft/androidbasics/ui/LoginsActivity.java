@@ -117,11 +117,10 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
             case R.id.btn_login://登录
                 mEtAccount.getText().toString().trim();
                 if (!TextUtils.isEmpty(mEtAccount.getText().toString().trim())&&!TextUtils.isEmpty(mEtPassword.getText().toString().trim())){
-
                     ActivityUtils.startActivity(MainActivity.class);
                     finish();
                 }else {
-
+                    ToastUtils.showToast("请检查登录信息");
                 }
                 break;
             case R.id.iv_clean_phone://清除账号
