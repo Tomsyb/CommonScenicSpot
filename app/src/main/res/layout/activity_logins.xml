@@ -6,22 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root"
-    android:background="@color/white"
+    android:background="@mipmap/bg_write"
     android:orientation="vertical"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context="com.android.daqsoft.androidbasics.ui.LoginsActivity">
     <com.android.daqsoft.androidbasics.view.DrawableTextView
+        android:textColor="@color/white"
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="80dp"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:text="成都地震监测欢迎你"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:drawableHeight="40dp"
         app:drawableWidth="120dp"/>
@@ -30,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:layout_below="@+id/logo"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="80dp"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
@@ -48,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:src="@mipmap/ic_mobile_flag" />
+                android:src="@mipmap/login_account_gray" />
 
             <EditText
                 android:id="@+id/et_mobile"
@@ -61,8 +62,8 @@
                 android:maxLength="11"
                 android:singleLine="true"
                 android:text=""
-                android:textColor="@color/text"
-                android:textColorHint="@color/text_gray"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="14dp" />
 
             <ImageView
@@ -77,7 +78,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/text_gray" />
+            android:background="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/ic_login_password" />
+                android:src="@mipmap/login_pwd_gray" />
 
             <EditText
                 android:id="@+id/et_password"
@@ -105,8 +106,8 @@
                 android:maxLength="30"
                 android:singleLine="true"
                 android:text=""
-                android:textColor="@color/text"
-                android:textColorHint="@color/text_gray"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="14dp" />
 
             <ImageView
@@ -128,7 +129,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/text_gray" />
+            android:background="@color/white" />
 
         <Button
             android:id="@+id/btn_login"
@@ -154,7 +155,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_weight="1"
                 android:text="注册新用户"
-                android:textColor="@color/text_gray"
+                android:textColor="@color/white"
                 android:textSize="14dp" />
 
             <TextView
@@ -164,7 +165,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="21dp"
                 android:text="忘记密码"
-                android:textColor="@color/text_gray"
+                android:textColor="@color/white"
                 android:textSize="14dp" />
         </LinearLayout>
     </LinearLayout>
@@ -189,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="联系客服"
-                android:textColor="@color/text_gray"
+                android:textColor="@color/white"
                 android:textSize="14dp" />
 
             <View
@@ -197,14 +198,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/text_gray" />
+                android:background="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="关于我们"
-                android:textColor="@color/text_gray"
+                android:textColor="@color/white"
                 android:textSize="14dp" />
         </LinearLayout>
     </RelativeLayout>

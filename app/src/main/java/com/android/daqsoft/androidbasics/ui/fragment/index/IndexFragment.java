@@ -208,6 +208,8 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Vie
 
     private void getData() {
         showLoadingDialog();
+        mBannerImgs.clear();
+        mBannerTitles.clear();
         mBannerImgs.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529041653392&di=b754108e12984c1a02793c256b7b9567&imgtype=0&src=http%3A%2F%2Fsrc.onlinedown.net%2Fd%2Ffile%2Fp%2F2017-02-21%2F686eb11f15b6db9f025e32b0973b1371.jpg");
         mBannerImgs.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3355331080,1887045785&fm=27&gp=0.jpg");
         mBannerTitles.add("GM-4磁通门磁力仪");

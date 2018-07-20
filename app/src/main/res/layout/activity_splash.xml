@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_splash"
+    android:background="@mipmap/bg_write"
     android:orientation="vertical"
     tools:context="com.android.daqsoft.androidbasics.ui.SplashActivity">
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content" />
         <TextView
             android:layout_marginTop="100dp"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/white"
             android:textStyle="bold"

@@ -3,12 +3,9 @@ package com.android.daqsoft.androidbasics.ui.fragment.index;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,11 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
@@ -32,6 +26,7 @@ import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
 import com.android.daqsoft.androidbasics.utils.ToastUtils;
+import com.android.daqsoft.androidbasics.utils.Utils;
 import com.android.daqsoft.androidbasics.utils.img.GlideUtils;
 import com.android.daqsoft.androidbasics.view.ChoicePopupWindow;
 import com.android.daqsoft.androidbasics.view.MyGridView;
@@ -41,29 +36,30 @@ import com.android.daqsoft.androidbasics.view.suppertext.SuperTextView;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import kr.co.namee.permissiongen.PermissionGen;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 
-
 /**
  * 事件上报具体上报
+ *
  * @author 严博
- * @date 2018-4-28.
  * @version 1.0.0
+ * @date 2018-4-28.
  * @since JDK 1.8
  */
-public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.OnItemLongClickListener{
+public class IndexPoliceXqFragment extends BaseFragment implements AdapterView
+        .OnItemLongClickListener {
     @BindView(R.id.include_img_back)
     ImageView mImgBack;
     @BindView(R.id.include_tv_title)
@@ -76,9 +72,11 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
     LinearLayout mLlRoute;
     @BindView(R.id.exception_gridView)
     MyGridView exception_gridView;
+    @BindView(R.id.btn_typeshijian)
+    Button mBtnshijian;
 
-    public PopupWindow videoPopupWindow;//视屏
     public PopupWindow audioPopupWindow;//音频
+    Unbinder unbinder;
     private boolean videoState = false, audioState = false;
 
     private RecordTask recordTask;
@@ -124,7 +122,8 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HashMap<String, String> clickMap = allListPic.get(i);
                 if (clickMap.get("itemImage").equals(defult)) {
-                    popupWindow.showAtLocation(exception_gridView, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    popupWindow.showAtLocation(exception_gridView, Gravity.BOTTOM | Gravity
+                            .CENTER_HORIZONTAL, 0, 0);
                 }
             }
         });
@@ -136,7 +135,6 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             }
         });
     }
-
 
 
     @Override
@@ -162,12 +160,14 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             choicePicture(5 - allListPic.size(), MODE_MULTI);
         }
     };
-    @OnClick({R.id.include_img_back, R.id.fg_mine_qure})
+    private String[] CoolectARR = {"公共设施", "基础资源", "物品遗失", "游客走失", "游客密度过载", "其他"};
+    @OnClick({R.id.include_img_back, R.id.fg_mine_qure,R.id.btn_typeshijian})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.include_img_back:
                 _mActivity.onBackPressed();
-                if (ObjectUtils.isNotEmpty(audioRecordPopupWindow)&&audioRecordPopupWindow.isShowing()) {
+                if (ObjectUtils.isNotEmpty(audioRecordPopupWindow) && audioRecordPopupWindow
+                        .isShowing()) {
                     animationDrawable.stop();
                     audioRecordPopupWindow.dismiss();
                 }
@@ -176,19 +176,31 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             case R.id.fg_mine_qure://点击上报
                 ToastUtils.showToast("上报成功");
                 break;
+            case R.id.btn_typeshijian:
+                Utils.showPicker(getActivity(), CoolectARR, new Utils.onBackListener() {
+
+                    @Override
+                    public void getItem(int pos, String item) {
+                        mBtnshijian.setText(item);
+                    }
+                });
+                break;
         }
     }
+
     /**
      * 跳转到系统相机
      */
     private File mTmpFile;
+
     private void showCamera() {
         // 跳转到系统照相机
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(_mActivity.getPackageManager()) != null) {
             // 设置系统相机拍照后的输出路径
             // 创建临时文件
-            mTmpFile = new File(Environment.getExternalStorageDirectory() + "/DaQI/Img", "temp" + System.currentTimeMillis() + ".jpg");
+            mTmpFile = new File(Environment.getExternalStorageDirectory() + "/DaQI/Img", "temp" +
+                    System.currentTimeMillis() + ".jpg");
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
             startActivityForResult(cameraIntent, Constant.REQUEST_CAMERA);
         } else {
@@ -196,11 +208,13 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         }
         popupWindow.dismiss();
     }
+
     /**
      * 从手机相册中选择
      */
     private ArrayList<HashMap<String, String>> allListPic = new ArrayList<>();
     public static final int MODE_MULTI = 1;
+
     private void choicePicture(int num, int model) {
         popupWindow.dismiss();
         Intent intent = new Intent(_mActivity, MultiImageSelectorActivity.class);
@@ -208,7 +222,8 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, false);
         // 最大图片选择数量
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, num);
-        // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity.MODE_MULTI)
+        // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity
+        // .MODE_MULTI)
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, model);
         // 默认选择
       /*  if (imgList != null && imgList.size() > 0) {
@@ -220,6 +235,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
 
     /**
      * 图片选择
+     *
      * @param
      */
     public void showPictureSelectWindow() {
@@ -268,6 +284,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
 
     private ArrayList<String> imgList = new ArrayList<>();
     private String location = "";
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -280,10 +297,11 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
             }
         } else if (requestCode == Constant.REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
-                LogUtils.e("直接选择图片返回" + data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
+                LogUtils.e("直接选择图片返回" + data.getStringArrayListExtra(MultiImageSelectorActivity
+                        .EXTRA_RESULT));
                 initGridView(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
             }
-        }else if (requestCode == Constant.REQUEST_LOCATION){
+        } else if (requestCode == Constant.REQUEST_LOCATION) {
             if (resultCode == RESULT_OK) {
                 location = data.getStringExtra("location");
                 //event_place_value.setText(location);
@@ -297,6 +315,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
     private SimpleAdapter simpleAdapter;
     private String defult = "drawable//" + R.mipmap.defult_add;
     private MyGridView emergency_grid_event;
+
     private void initGridView(ArrayList<String> imgList) {
         if (imgList.size() == 0) {
             HashMap<String, String> addBtnMap = new HashMap<>();
@@ -324,10 +343,12 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         }
         setSimpleAdapter(allListPic);
     }
+
     private void setSimpleAdapter(ArrayList<HashMap<String, String>> allListPic) {
         if (null == simpleAdapter) {
             simpleAdapter = new SimpleAdapter(_mActivity,
-                    allListPic, R.layout.rounded_imageview_layout, new String[]{"itemImage"}, new int[]{R.id.rounded_item_image});
+                    allListPic, R.layout.rounded_imageview_layout, new String[]{"itemImage"}, new
+                    int[]{R.id.rounded_item_image});
         } else {
             simpleAdapter.notifyDataSetChanged();
         }
@@ -343,7 +364,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
                         imageView.setImageResource(R.mipmap.defult_add);
                     } else {
                         String result = "file://" + str;
-                        GlideUtils.GlideImg(_mActivity,result,imageView);
+                        GlideUtils.GlideImg(_mActivity, result, imageView);
                     }
                     return true;
                 }
@@ -354,6 +375,7 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         exception_gridView.setAdapter(simpleAdapter);
 
     }
+
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
         HashMap<String, String> clickMap = allListPic.get(i);
@@ -370,4 +392,20 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView.O
         }
         return false;
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
 }

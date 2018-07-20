@@ -10,10 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 
 import java.util.LinkedList;
+
+import cn.qqtheme.framework.picker.OptionPicker;
+import cn.qqtheme.framework.widget.WheelView;
 
 /**
  * <pre>
@@ -233,4 +237,25 @@ public final class Utils {
         return null;
     }
 
+    public interface onBackListener {
+        void getItem(int postion, String item);
+    }
+
+    public static void showPicker(Activity context, String[] dataArr, final onBackListener listener) {
+        OptionPicker picker1 = new OptionPicker(context, dataArr);
+        picker1.setCanceledOnTouchOutside(false);
+        picker1.setDividerRatio(WheelView.DividerConfig.FILL);
+        picker1.setShadowColor(context.getResources().getColor(R.color.main), 40);
+        picker1.setSelectedIndex(1);
+        picker1.setCycleDisable(true);
+        picker1.setTextSize(14);
+        picker1.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+            @Override
+            public void onOptionPicked(int index, String item) {
+                listener.getItem(index, item);
+                //ToastUtils.showLongToast("index=" + index + ", item=" + item);
+            }
+        });
+        picker1.show();
+    }
 }

@@ -17,6 +17,7 @@ import com.android.daqsoft.androidbasics.base.BaseFragment;
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.Basebean;
+import com.android.daqsoft.androidbasics.ui.fragment.other.OtherFragment;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
@@ -117,8 +118,7 @@ public class IndexScenicFragment extends BaseFragment {
                     public void onClick(View view) {
                         switch (position) {
                             case 0://景区简介
-                                start(IndexPoliceXqFragment.newInstance());
-                                ToastUtils.showToast("开发中...");
+                                //start(IndexPoliceXqFragment.newInstance());
                                 break;
                             case 1://游览须知
                                 ToastUtils.showToast("开发中...");
@@ -130,14 +130,13 @@ public class IndexScenicFragment extends BaseFragment {
                                 ToastUtils.showToast("开发中...");
                                 break;
                             case 4://景区交通
-                                ToastUtils.showToast("开发中...");
+                                start(OtherFragment.newInstance());
                                 break;
                             case 5://景区文化
                                 ToastUtils.showToast("开发中...");
                                 break;
                             case 6://景区公告
-                                ToastUtils.showToast("开发中...");
-                               // start(IndexScenicGongGaoFragment.newInstance());
+                                start(IndexPoliceXqFragment.newInstance());
                                 break;
                             case 7://游记攻略
                                 ToastUtils.showToast("开发中...");
