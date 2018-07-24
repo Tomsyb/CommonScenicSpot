@@ -20,6 +20,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+                <TextView
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:text="地震智能仪器运维平台"
+                    android:background="@color/main"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -384,12 +392,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"/>
                 </LinearLayout>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/index_rv"
+                <ViewAnimator
+                    android:id="@+id/item_va"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                </android.support.v7.widget.RecyclerView>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/index_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <include layout="@layout/include_nodata"/>
+                </ViewAnimator>
             </LinearLayout>
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

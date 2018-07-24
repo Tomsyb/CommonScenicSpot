@@ -16,16 +16,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.daqsoft.androidbasics.Main2Activity;
 import com.android.daqsoft.androidbasics.MainActivity;
 import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseActivity;
+import com.android.daqsoft.androidbasics.base.IApplication;
+import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.ToastUtils;
 import com.android.daqsoft.androidbasics.view.DrawableTextView;
 import com.android.daqsoft.androidbasics.view.KeyboardWatcher;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 public class LoginsActivity extends BaseActivity implements KeyboardWatcher.SoftKeyboardStateListener{
     @BindView(R.id.logo)
@@ -42,6 +49,8 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
     ImageView mImgShowPwd;
     @BindView(R.id.body)
     LinearLayout body;
+    @BindView(R.id.et_url)
+    EditText mEtUrl;
 
     private boolean flag = false;
     private int screenHeight = 0;//屏幕高度
@@ -115,10 +124,45 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_login://登录
-                mEtAccount.getText().toString().trim();
-                if (!TextUtils.isEmpty(mEtAccount.getText().toString().trim())&&!TextUtils.isEmpty(mEtPassword.getText().toString().trim())){
-                    ActivityUtils.startActivity(MainActivity.class);
-                    finish();
+                String acctount = mEtAccount.getText().toString().trim();
+                String psd = mEtPassword.getText().toString().trim();
+                String url = mEtUrl.getText().toString().trim();
+                IApplication.SP.put(Constant.BASE_URL,url);
+                if (!TextUtils.isEmpty(acctount)&&!TextUtils.isEmpty(psd)&&!TextUtils.isEmpty(url)){
+                    showLoadingDialog();
+                    OkHttpUtils.get()
+                            .url(url+"imec/login?")
+                            .addParams("username",acctount)
+                            .addParams("password",psd)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onAfter(int id) {
+                                    super.onAfter(id);
+                                    dismissLoadingDialog();
+                                }
+
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    ToastUtils.showToastShort("登录失败!");
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    try {
+                                        JSONObject object = JSONObject.parseObject(response);
+                                        if (object.getIntValue("resultCode")==0){
+                                            ToastUtils.showToastShort("登录成功");
+                                            ActivityUtils.startActivity(Main2Activity.class);
+                                            finish();
+                                        }else {
+                                            ToastUtils.showToastShort("登录失败!");
+                                        }
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                 }else {
                     ToastUtils.showToast("请检查登录信息");
                 }

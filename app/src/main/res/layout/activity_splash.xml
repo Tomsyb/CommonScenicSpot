@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_write"
+    android:background="@mipmap/ic_splash"
     android:orientation="vertical"
     tools:context="com.android.daqsoft.androidbasics.ui.SplashActivity">
     <LinearLayout
@@ -20,7 +20,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="成都地震监测调度系统"
+            android:text="成都地震仪器运维平台"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <TextView
@@ -29,7 +29,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="监测美好生活"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

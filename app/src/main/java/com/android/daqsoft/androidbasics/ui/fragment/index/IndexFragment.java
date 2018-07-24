@@ -16,6 +16,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -24,6 +25,7 @@ import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.adapter.recycleadapter.CommonAdapter;
 import com.android.daqsoft.androidbasics.adapter.recycleadapter.base.ViewHolder;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
+import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.IndexYiBean;
 import com.android.daqsoft.androidbasics.http.RequestData;
@@ -46,12 +48,15 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.transformer.StackTransformer;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 /**
@@ -105,6 +110,8 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Vie
     LinearLayout mLLbottom;
     @BindView(R.id.index_rv)
     RecyclerView mRv;
+    @BindView(R.id.item_va)
+    ViewAnimator mVa;
 
     /**
      * 标记网络请求全部完成
@@ -151,32 +158,20 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Vie
     /**
      * 初始化适配器
      */
+    private List<IndexYiBean>  mDatas ;
+    private CommonAdapter<IndexYiBean> mAdapter;
     private void initRvAdapter() {
-        String[] yiqiArr = getResources().getStringArray(R.array.index_yiqi);
-        String[] contentArr = getResources().getStringArray(R.array.index_content);
-        String[] fenArr = getResources().getStringArray(R.array.index_fenxiang);
-        String[] zantaiArr = getResources().getStringArray(R.array.index_zhantai);
+        mDatas  = new ArrayList<>();
         mRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<IndexYiBean> mDatas = new ArrayList<>();
-        for (int i = 0; i < yiqiArr.length; i++) {
-            IndexYiBean bean = new IndexYiBean();
-            bean.setName(yiqiArr[i]);
-            bean.setResId(R.mipmap.ic_index_left);
-            bean.setContent(contentArr[i]);
-            bean.setFenxiang(fenArr[i]);
-            bean.setZantai(zantaiArr[i]);
-            mDatas.add(bean);
-        }
         mRv.setHasFixedSize(true);
         mRv.setNestedScrollingEnabled(false);
-        mRv.setAdapter(new CommonAdapter<IndexYiBean>(getActivity(),R.layout.item_index_yiqi,mDatas) {
-
+        mAdapter= new CommonAdapter<IndexYiBean>(getActivity(),R.layout.item_index_yiqi,mDatas) {
             @Override
             protected void convert(ViewHolder holder, final IndexYiBean bean, int position) {
-                holder.setText(R.id.item_index_title,bean.getName()+"("+bean.getContent()+")");
-                holder.setText(R.id.item_index_content,"测量分项:"+bean.getFenxiang());
-                RoundImageView img = (RoundImageView) holder.getView(R.id.item_index_img);
-                img.setImageResource(bean.getResId());
+                holder.setText(R.id.item_index_title,bean.getName());
+                holder.setText(R.id.item_index_content,bean.getFenxiang());
+//                RoundImageView img = (RoundImageView) holder.getView(R.id.item_index_img);
+//                img.setImageResource(bean.getResId());
                 holder.setText(R.id.item_index_tai,bean.getZantai()+"观测");
                 holder.setOnClickListener(R.id.index_ll_4, new View.OnClickListener() {
                     @Override
@@ -185,7 +180,42 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Vie
                     }
                 });
             }
-        });
+        };
+        mRv.setAdapter(mAdapter);
+
+        OkHttpUtils.get()
+                .url(IApplication.SP.getString(Constant.BASE_URL)+"imec/getDeviceList?department=51001")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showToastShort("请求错误");
+                        mVa.setDisplayedChild(1);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject object = JSONObject.parseObject(response);
+                            if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
+                                for (int i = 0; i < object.getJSONArray("data").size(); i++) {
+                                    IndexYiBean bean = new IndexYiBean();
+                                    bean.setName(object.getString("deviceAbbreviation")+object.getString("deviceName")+"("+object.getString("deviceTag")+")");
+                                    bean.setFenxiang("测量分项:"+object.getString("deviceItem"));
+                                    bean.setZantai(object.getString("deviceStartRun"));
+                                    mDatas.add(bean);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }else {
+                                mVa.setDisplayedChild(1);
+                            }
+                        }catch (Exception e){
+                            mVa.setDisplayedChild(1);
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
     }
 
     @Override

@@ -28,6 +28,7 @@ public class Constant {
     public static String WXHEAD_URL = "WXHEAD_URL";
     public static String JQGGLIST = "JQGGLIST";
     public static String RobotXq = "RobotXq";
+    public static String BASE_URL = "BASE_URL";
     //
     public static final int FIRST = 0;
     public static final int SECOND = 1;

@@ -29,7 +29,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        BarUtils.setNavBarVisibility(this,false);
         if (findFragment(IndexFragment.class) == null) {
             loadRootFragment(R.id.fl_container, IndexFragment.newInstance());
         }
