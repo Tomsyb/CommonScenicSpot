@@ -18,6 +18,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <com.android.daqsoft.androidbasics.view.RoundImageView
+                app:type="round"
+                app:radius="10dp"
                 android:scaleType="fitXY"
                 android:id="@+id/item_index_img"
                 android:src="@mipmap/ic_index_left"
@@ -33,27 +35,64 @@
                     android:id="@+id/item_index_title"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="景区交通"/>
-                <TextView
-                    android:id="@+id/item_index_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/text"
-                    android:textSize="11sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="快捷到达各个景点"/>
-                <TextView
-                    android:gravity="end"
-                    android:id="@+id/item_index_tai"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp"
+                        android:background="@drawable/bg_common_solid_orange"
+                        android:id="@+id/item_index_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快捷到"/>
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp"
+                        android:background="@drawable/bg_common_solid_orange"
+                        android:id="@+id/item_index_content2"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快捷到"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/orange"
-                    android:textSize="11sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="快捷到达各个景点"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/item_index_ta"
+                        android:textColor="@color/orange"
+                        android:textSize="14sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="快捷到达"/>
+                    <TextView
+                        android:id="@+id/item_index_tai"
+                        android:textColor="@color/text_gray"
+                        android:textSize="11sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=".."/>
+                </LinearLayout>
             </LinearLayout>
 
 

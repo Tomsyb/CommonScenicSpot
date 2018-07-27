@@ -20,68 +20,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <TextView
-                    android:gravity="center_horizontal|center_vertical"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:text="地震智能仪器运维平台"
+                <RelativeLayout
                     android:background="@color/main"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.youth.banner.Banner
-                        android:id="@+id/index_top_banner"
+                    android:layout_height="78dp">
+                    <ImageView
+                        android:layout_marginLeft="15dp"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imtopen"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_open"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:text="地震智能仪器运维平台"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"/>
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/index_ll_top"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-                        <include layout="@layout/include_search_trastlate"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content">
-
-                        <View
-                            android:background="@color/white"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
-                        <TextView
-                            android:id="@+id/index_tv_weather_top"
-                            android:gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:textSize="@dimen/txt_18"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="15℃～26℃"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/index_tv_weather_content"
-                            android:gravity="center"
-                            android:layout_marginTop="3dp"
-                            android:textSize="@dimen/txt_11"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="今日请转多云"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <View
-                            android:layout_marginTop="@dimen/margin_10"
-                            android:background="@color/white"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
-                    </LinearLayout>
+                        android:layout_height="match_parent" />
                 </RelativeLayout>
+
+                <com.youth.banner.Banner
+                    android:id="@+id/index_top_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"/>
                 <include layout="@layout/include_line_one"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -160,16 +124,6 @@
 
                 </LinearLayout>
 
-                <com.android.daqsoft.androidbasics.view.sortbutton.SoreButton
-                    android:visibility="gone"
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/soreButton"
-                    android:background="#ffffff"
-                    app:SoreRadioSelect="@drawable/radio_select"
-                    app:SoreRadioUnselected="@drawable/radio_unselected"
-                    app:SoreDistance="20"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
                 <!--了解景区-->
 
                 <LinearLayout
@@ -397,6 +351,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <android.support.v7.widget.RecyclerView
+                        android:background="@color/main_gray"
                         android:id="@+id/index_rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>

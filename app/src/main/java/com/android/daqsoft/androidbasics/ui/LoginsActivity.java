@@ -49,8 +49,6 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
     ImageView mImgShowPwd;
     @BindView(R.id.body)
     LinearLayout body;
-    @BindView(R.id.et_url)
-    EditText mEtUrl;
 
     private boolean flag = false;
     private int screenHeight = 0;//屏幕高度
@@ -126,12 +124,10 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
             case R.id.btn_login://登录
                 String acctount = mEtAccount.getText().toString().trim();
                 String psd = mEtPassword.getText().toString().trim();
-                String url = mEtUrl.getText().toString().trim();
-                IApplication.SP.put(Constant.BASE_URL,url);
-                if (!TextUtils.isEmpty(acctount)&&!TextUtils.isEmpty(psd)&&!TextUtils.isEmpty(url)){
+                if (!TextUtils.isEmpty(acctount)&&!TextUtils.isEmpty(psd)){
                     showLoadingDialog();
                     OkHttpUtils.get()
-                            .url(url+"imec/login?")
+                            .url(Constant.BASE_URL+"imec/login?")
                             .addParams("username",acctount)
                             .addParams("password",psd)
                             .build()
@@ -151,8 +147,13 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
                                 public void onResponse(String response, int id) {
                                     try {
                                         JSONObject object = JSONObject.parseObject(response);
+                                        JSONObject data = object.getJSONObject("data");
                                         if (object.getIntValue("resultCode")==0){
                                             ToastUtils.showToastShort("登录成功");
+                                            IApplication.SP.put("account",data.getString("account"));
+                                            IApplication.SP.put("imghead",data.getString("profile"));
+                                            IApplication.SP.put("bottomtag",data.getString("branch"));
+                                            IApplication.SP.put("tel",data.getString("tel"));
                                             ActivityUtils.startActivity(Main2Activity.class);
                                             finish();
                                         }else {
