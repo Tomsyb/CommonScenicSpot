@@ -17,6 +17,7 @@ import com.android.daqsoft.androidbasics.base.BaseFragment;
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.Basebean;
+import com.android.daqsoft.androidbasics.ui.ActivityWebView;
 import com.android.daqsoft.androidbasics.ui.fragment.other.OtherFragment;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
@@ -46,6 +47,9 @@ public class IndexScenicFragment extends BaseFragment {
     @BindView(R.id.title_yanb)
     TextView mTitle;
 
+    private String huanjin= "";
+    private String yuanli= "";
+    private String guifan= "";
     /**
      * 数据
      */
@@ -54,9 +58,12 @@ public class IndexScenicFragment extends BaseFragment {
     private CommonAdapter<Basebean> adapter;
 
     //单列
-    public static IndexScenicFragment newInstance(String title) {
+    public static IndexScenicFragment newInstance(String title,String huanjin,String yuanli,String guifan) {
         Bundle args = new Bundle();
         args.putString("TITLE",title);
+        args.putString("huanjin",huanjin);
+        args.putString("yuanli",yuanli);
+        args.putString("guifan",guifan);
         IndexScenicFragment fragment = new IndexScenicFragment();
         fragment.setArguments(args);
         return fragment;
@@ -66,6 +73,9 @@ public class IndexScenicFragment extends BaseFragment {
     public void init(Bundle savedInstanceState) {
         initRecycleview();
         mTitle.setText(getArguments().getString("TITLE"));
+        huanjin = getArguments().getString("huanjin");
+        yuanli = getArguments().getString("yuanli");
+        guifan = getArguments().getString("guifan");
         getData();
     }
 
@@ -118,13 +128,14 @@ public class IndexScenicFragment extends BaseFragment {
                     public void onClick(View view) {
                         switch (position) {
                             case 0://景区简介
+                                ActivityUtils.startHtmlActivity(huanjin, ActivityWebView.class);
                                 //start(IndexPoliceXqFragment.newInstance());
                                 break;
                             case 1://游览须知
-                                ToastUtils.showToast("开发中...");
+                                ActivityUtils.startHtmlActivity(yuanli, ActivityWebView.class);
                                 break;
                             case 2://票务政策
-                                ToastUtils.showToast("开发中...");
+                                ActivityUtils.startHtmlActivity(guifan, ActivityWebView.class);
                                 break;
                             case 3://开放时间
                                 ToastUtils.showToast("开发中...");

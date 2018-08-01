@@ -154,6 +154,7 @@ public class LoginsActivity extends BaseActivity implements KeyboardWatcher.Soft
                                             IApplication.SP.put("imghead",data.getString("profile"));
                                             IApplication.SP.put("bottomtag",data.getString("branch"));
                                             IApplication.SP.put("tel",data.getString("tel"));
+                                            IApplication.SP.put("stationID",data.getString("stationID"));
                                             ActivityUtils.startActivity(Main2Activity.class);
                                             finish();
                                         }else {

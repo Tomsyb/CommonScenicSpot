@@ -47,6 +47,33 @@ public class IndexYiBean {
     private String deviceImage;
     private int deviceIsWarning;
     private String deviceStationName;
+    private String deviceEnvironment;// 观察环境
+    private String deviceTheory;//原理
+    private String deviceStandard;//一起规范
+
+    public String getDeviceStandard() {
+        return deviceStandard;
+    }
+
+    public void setDeviceStandard(String deviceStandard) {
+        this.deviceStandard = deviceStandard;
+    }
+
+    public String getDeviceTheory() {
+        return deviceTheory;
+    }
+
+    public void setDeviceTheory(String deviceTheory) {
+        this.deviceTheory = deviceTheory;
+    }
+
+    public String getDeviceEnvironment() {
+        return deviceEnvironment;
+    }
+
+    public void setDeviceEnvironment(String deviceEnvironment) {
+        this.deviceEnvironment = deviceEnvironment;
+    }
 
     public String getDeviceName() {
         return deviceName;

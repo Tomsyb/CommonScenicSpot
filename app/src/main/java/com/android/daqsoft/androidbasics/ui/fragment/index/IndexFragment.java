@@ -20,6 +20,7 @@ import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.adapter.recycleadapter.CommonAdapter;
 import com.android.daqsoft.androidbasics.adapter.recycleadapter.base.ViewHolder;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
+import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.IndexYiBean;
 import com.android.daqsoft.androidbasics.ui.ActivityWebView;
@@ -148,8 +149,9 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                 holder.setOnClickListener(R.id.index_ll_4, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         ((Main2Activity) getActivity()).startBrotherFragment(IndexScenicFragment
-                                .newInstance(bean.getDeviceName()));
+                                .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),bean.getDeviceStandard()));
                     }
                 });
             }
@@ -180,9 +182,6 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
     }
 
     private void getData() {
-        mBannerImgs.clear();
-        mBannerTitles.clear();
-        mBannerHtml.clear();
         OkHttpUtils.get()
                 .url(Constant.BASE_URL + "imec/getBannerList")
                 .build()
@@ -209,6 +208,9 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                         try {
                             JSONObject object = JSONObject.parseObject(response);
                             JSONArray dataArr = object.getJSONArray("data");
+                            mBannerImgs.clear();
+                            mBannerTitles.clear();
+                            mBannerHtml.clear();
                             for (int i = 0; i < dataArr.size(); i++) {
                                 JSONObject obj = dataArr.getJSONObject(i);
                                 mBannerImgs.add(obj.getString("adImg"));
@@ -227,7 +229,8 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
     public void getBannerData() {
         mDatas.clear();
         OkHttpUtils.get()
-                .url(Constant.BASE_URL + "imec/getDeviceList?stationID=51001")
+                .url(Constant.BASE_URL + "imec/getDeviceList?")
+                .addParams("stationID", IApplication.SP.getString("stationID"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -274,6 +277,9 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                                     bean.setDeviceImage(obj.getString("deviceImage"));
                                     bean.setDeviceIsWarning(obj.getIntValue("deviceIsWarning"));
                                     bean.setDeviceStationName(obj.getString("deviceStationName"));
+                                    bean.setDeviceEnvironment(obj.getString("deviceEnvironment"));
+                                    bean.setDeviceTheory(obj.getString("deviceTheory"));
+                                    bean.setDeviceStandard(obj.getString("deviceStandard"));
                                     mDatas.add(bean);
                                 }
                                 mAdapter.notifyDataSetChanged();

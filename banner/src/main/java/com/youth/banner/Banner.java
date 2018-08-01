@@ -57,7 +57,7 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
     private int currentItem;
     private int gravity = -1;
     private int lastPosition = 1;
-    private int scaleType = 1;
+    private int scaleType = 6;
     private List<String> titles;
     private List imageUrls;
     private List<View> imageViews;
@@ -411,7 +411,7 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         indicatorInside.removeAllViews();
         for (int i = 0; i < count; i++) {
             ImageView imageView = new ImageView(context);
-            imageView.setScaleType(ScaleType.CENTER_CROP);
+            imageView.setScaleType(ScaleType.FIT_XY);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mIndicatorWidth, mIndicatorHeight);
             params.leftMargin = mIndicatorMargin;
             params.rightMargin = mIndicatorMargin;
