@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/usercenter_icon_maillist_selected"
-            android:title="我的站台" />
+            android:title="我的台站" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/usercenter_icon_setting_selected"

@@ -75,7 +75,7 @@ public class IndexPoliceFragment extends BaseFragment {
             case R.id.police_img_police:
                 break;
             case R.id.police_ll_report:
-                start(IndexPoliceXqFragment.newInstance());
+                start(IndexPoliceXqFragment.newInstance("",""));
                 break;
             case R.id.police_ll_dangerous:
                 ToastUtils.showToast("待开发");

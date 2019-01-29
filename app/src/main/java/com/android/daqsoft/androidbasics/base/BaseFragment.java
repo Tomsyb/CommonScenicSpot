@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.daqsoft.androidbasics.R;
+import com.android.daqsoft.androidbasics.view.CustomDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +54,25 @@ public abstract class BaseFragment extends SupportFragment{
         init(savedInstanceState);
         return mRootView;
     }
+    private CustomDialog logDialog;
+    /**
+     * 下面是加载框
+     */
+    public void showLoadingDialog() {
+        if (logDialog == null) {
+            logDialog = new CustomDialog(getActivity(),"加载中...");
+        }
+        logDialog.show();
+    }
 
+    /**
+     * 消失
+     */
+    public void dismissLoadingDialog() {
+        if (logDialog != null) {
+            logDialog.dismiss();
+        }
+    }
 
     /**
      *  必须重写的方法 初始化

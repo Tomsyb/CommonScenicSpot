@@ -23,7 +23,7 @@
                 <RelativeLayout
                     android:background="@color/main"
                     android:layout_width="match_parent"
-                    android:layout_height="78dp">
+                    android:layout_height="68dp">
                     <ImageView
                         android:layout_marginLeft="15dp"
                         android:scaleType="fitXY"
@@ -36,7 +36,7 @@
                         android:textStyle="bold"
                         android:gravity="center_horizontal|center_vertical"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:text="地震智能仪器运维平台"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -45,7 +45,7 @@
                 <com.youth.banner.Banner
                     android:id="@+id/index_top_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"/>
+                    android:layout_height="200dp"/>
                 <include layout="@layout/include_line_one"/>
                 <LinearLayout
                     android:layout_width="match_parent"

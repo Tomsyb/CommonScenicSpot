@@ -16,100 +16,14 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
-            <include layout="@layout/include_space_10"/>
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_top"
+                android:textSize="14sp"
+                android:padding="@dimen/dp_10"
+                android:text="台站代码："
+                android:textColor="@color/orange"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/table"
-                    android:drawablePadding="5dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="12dp"
-                    android:text="台站代码"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-                <EditText
-                    android:hint="请输入"
-                    android:background="@null"
-                    style="?android:attr/textViewStyle"
-                    android:id="@+id/collect_tai"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:padding="10dp"
-                    android:textColor="@color/text_gray"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-            <include layout="@layout/include_line_one"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/table"
-                    android:drawablePadding="5dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="12dp"
-                    android:text="设备ID"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-                <EditText
-                    android:hint="请输入"
-                    android:background="@null"
-                    style="?android:attr/textViewStyle"
-                    android:id="@+id/collect_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:padding="10dp"
-                    android:textColor="@color/text_gray"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-            <include layout="@layout/include_line_one"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/table"
-                    android:drawablePadding="5dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="12dp"
-                    android:text="处理人员"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-                <EditText
-                    android:hint="请输入"
-                    android:background="@null"
-                    style="?android:attr/textViewStyle"
-                    android:id="@+id/collect_people"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:padding="10dp"
-                    android:textColor="@color/text_gray"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-            <include layout="@layout/include_line_one"/>
+                android:layout_height="wrap_content" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +41,8 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16"/>
 
-                <EditText
+                <TextView
+                    android:drawableRight="@mipmap/icon_more"
                     android:hint="请输入"
                     android:background="@null"
                     style="?android:attr/textViewStyle"
@@ -158,8 +73,9 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16"/>
 
-                <EditText
-                    android:hint="请输入"
+                <TextView
+                    android:drawableRight="@mipmap/icon_more"
+                    android:hint="请选择"
                     android:background="@null"
                     style="?android:attr/textViewStyle"
                     android:id="@+id/collect_di"
@@ -243,34 +159,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-            <EditText
-                android:id="@+id/exception_et"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@color/white"
-                android:gravity="top"
-                android:hint="补充详情可帮助更多的用户..."
-                android:maxLength="200"
-                android:padding="10dp"
-                android:textColor="@color/text_gray"
-                android:textColorHighlight="@color/text_gray"
-                android:textSize="14sp" />
-            <com.android.daqsoft.androidbasics.view.MyGridView
-                android:id="@+id/exception_gridView"
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:background="@drawable/bg_text_index"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:columnWidth="70dp"
-                android:gravity="center"
-                android:horizontalSpacing="3dp"
-                android:listSelector="#00000000"
-                android:numColumns="4"
-                android:paddingBottom="18dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="18dp"
-                android:scrollbars="none"
-                android:verticalSpacing="3dp" />
-            <include layout="@layout/include_line_one"/>
+                android:orientation="vertical">
+                <EditText
+                    android:maxLength="200"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:background="@null"
+                    style="?android:attr/textViewStyle"
+                    android:id="@+id/y_et_content_collect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请填写你要上报的内容"
+                    android:textSize="13sp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(提示:请长按删除)"
+                    android:textColor="@color/orange"
+                    android:textSize="13sp"/>
+                <GridView
+                    android:id="@+id/grid_upload_pictures"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:horizontalSpacing="5dp"
+                    android:numColumns="5"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="5dp"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

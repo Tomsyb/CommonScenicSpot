@@ -18,8 +18,8 @@
 
     <!--首页的菜单-->
     <array name="index_menu">
-        <item>观察环境</item>
-        <item>观察原理</item>
+        <item>观测环境</item>
+        <item>观测环境</item>
         <item>仪器规范</item>
         <item>网络测试</item>
         <item>数据曲线</item>
