@@ -149,7 +149,6 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                 holder.setOnClickListener(R.id.index_ll_4, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         ((Main2Activity) getActivity()).startBrotherFragment(IndexScenicFragment
                                 .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),bean.getDeviceStandard()));
                     }
@@ -183,7 +182,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
 
     private void getData() {
         OkHttpUtils.get()
-                .url(Constant.BASE_URL + "imec/getBannerList")
+                .url(Constant.BASE_URL + "imec/getBanner")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -206,8 +205,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                     @Override
                     public void onResponse(String response, int id) {
                         try {
-                            JSONObject object = JSONObject.parseObject(response);
-                            JSONArray dataArr = object.getJSONArray("data");
+                            JSONArray dataArr = JSONArray.parseArray(response);
                             mBannerImgs.clear();
                             mBannerTitles.clear();
                             mBannerHtml.clear();
@@ -255,6 +253,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                     @Override
                     public void onResponse(String response, int id) {
                         try {
+                            mDatas.clear();
                             JSONObject object = JSONObject.parseObject(response);
                             JSONArray dataArr = object.getJSONArray("data");
                             if (object.getIntValue("resultCode") == 0 && dataArr.size() > 0) {

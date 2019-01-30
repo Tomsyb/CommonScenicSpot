@@ -26,8 +26,7 @@ import butterknife.BindView;
  * @Describe: 引导页
  */
 public class SplashActivity extends BaseActivity {
-    @BindView(R.id.tv_title)
-    TextView ivLogo;
+    private TextView ivLogo;
 
     @Override
     public int getContentViewResId() {
@@ -36,7 +35,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        initBaseData();
+        ivLogo = findViewById(R.id.tv_title);
         BarUtils.setNavBarVisibility(this,false);
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.3f, 1f);
         PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", 0.3f, 1f);
@@ -72,22 +71,5 @@ public class SplashActivity extends BaseActivity {
         animatorSet.start();
     }
 
-    private void initBaseData() {
-        RequestData.getSiteNoticeList(1, "", "", new RequestData.OnDataCallBack() {
-            @Override
-            public void onSuccess(String response) {
-                IApplication.SP.put(Constant.JQGGLIST,response);
-            }
-
-            @Override
-            public void onFail() {
-                IApplication.SP.put(Constant.JQGGLIST,"");
-            }
-
-            @Override
-            public void onFinish() {
-            }
-        });
-    }
 
 }

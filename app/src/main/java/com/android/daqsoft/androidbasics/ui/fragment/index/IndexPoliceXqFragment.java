@@ -1,12 +1,21 @@
 package com.android.daqsoft.androidbasics.ui.fragment.index;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +23,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
 import com.android.daqsoft.androidbasics.common.Constant;
+import com.android.daqsoft.androidbasics.ui.fragment.index.adapter.ImageUtils;
+import com.android.daqsoft.androidbasics.ui.fragment.index.adapter.UploadImageAdapter;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
 import com.android.daqsoft.androidbasics.utils.ToastUtils;
+import com.android.daqsoft.androidbasics.utils.UpFileUtils;
 import com.android.daqsoft.androidbasics.utils.Utils;
 import com.android.daqsoft.androidbasics.utils.img.GlideUtils;
 import com.android.daqsoft.androidbasics.view.ChoicePopupWindow;
@@ -34,11 +48,17 @@ import com.android.daqsoft.androidbasics.view.audio.RecordMedia;
 import com.android.daqsoft.androidbasics.view.audio.RecordTask;
 import com.android.daqsoft.androidbasics.view.suppertext.SuperTextView;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 
@@ -46,8 +66,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.qqtheme.framework.picker.DatePicker;
 import kr.co.namee.permissiongen.PermissionGen;
+import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import okhttp3.Call;
 
 
 /**
@@ -58,38 +81,34 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * @date 2018-4-28.
  * @since JDK 1.8
  */
-public class IndexPoliceXqFragment extends BaseFragment implements AdapterView
-        .OnItemLongClickListener {
+public class IndexPoliceXqFragment extends BaseFragment{
     @BindView(R.id.include_img_back)
     ImageView mImgBack;
     @BindView(R.id.include_tv_title)
     TextView mTvTitle;
-    @BindView(R.id.exception_et)
-    EditText mReportEt;
-    @BindView(R.id.fg_mine_qure)
-    SuperTextView mQure;
-    @BindView(R.id.police_route)
-    LinearLayout mLlRoute;
-    @BindView(R.id.exception_gridView)
-    MyGridView exception_gridView;
+    @BindView(R.id.grid_upload_pictures)
+    GridView uploadGridView;
     @BindView(R.id.btn_typeshijian)
     Button mBtnshijian;
-
-    public PopupWindow audioPopupWindow;//音频
-    Unbinder unbinder;
-    private boolean videoState = false, audioState = false;
-
-    private RecordTask recordTask;
-    //true 说明这个timer以daemon方式运行（优先级低，程序结束timer也自动结束）
-    private Timer timer = new Timer(true);
-    public PopupWindow audioRecordPopupWindow;
-    public AnimationDrawable animationDrawable = null;
-    private int audioFirst = 0;//判断是否是第一次点击录制音频
-    private File audioFile = null;
-    private int i = 0;
-    public TextView tvAudioAnim = null;
-    private ChoicePopupWindow popupWindow;
-
+    @BindView(R.id.collect_time)
+    TextView mTvTime;
+    private String mTime = "";
+    /**
+     * 选择图片的返回码
+     */
+    private static final int REQUEST_IMAGE = 2;
+    /**
+     * 选择图片的返回码
+     */
+    public final static int SELECT_IMAGE_RESULT_CODE = 200;
+    /**
+     * 图片上传Adapter
+     */
+    private UploadImageAdapter adapter;
+    /**
+     * 选择的集合
+     */
+    private ArrayList<String> mSelectPath;
     //单列
     public static IndexPoliceXqFragment newInstance() {
         Bundle args = new Bundle();
@@ -101,41 +120,46 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView
 
     @Override
     public void init(Bundle savedInstanceState) {
-        initPresenon();
         initView();
-        initGridView(imgList);
     }
 
-    private void initPresenon() {
-        PermissionGen.with(_mActivity)
-                .addRequestCode(100)
-                .permissions(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .request();
-    }
-
+    /**
+     * 图片字符列表(本地)
+     */
+    private LinkedList<String> imgList = new LinkedList<String>();
+    /**
+     * 需要上传的图片路径  控制默认图片在最后面需要用LinkedList
+     */
+    private LinkedList<String> dataList = new LinkedList<String>();
     private void initView() {
         mTvTitle.setText("一键报警");
-        exception_gridView.setOnItemLongClickListener(this);
-        exception_gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String, String> clickMap = allListPic.get(i);
-                if (clickMap.get("itemImage").equals(defult)) {
-                    popupWindow.showAtLocation(exception_gridView, Gravity.BOTTOM | Gravity
-                            .CENTER_HORIZONTAL, 0, 0);
-                }
-            }
-        });
-        popupWindow = new ChoicePopupWindow(_mActivity, firstListener, secondListener);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-
-            }
-        });
+        // 图片上传初始化第一个添加按钮数据
+        dataList.addLast(null);
+        adapter = new UploadImageAdapter(getActivity(), dataList);
+        uploadGridView.setAdapter(adapter);
+        uploadGridView.setOnItemClickListener(mItemClick);
+        uploadGridView.setOnItemLongClickListener(mItemLongClick);
     }
 
+    /**
+     * 上传图片GridView Item长按监听
+     */
+    private AdapterView.OnItemLongClickListener mItemLongClick = new AdapterView
+            .OnItemLongClickListener() {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                       int position, long id) {
+            // 长按删除
+            if (parent.getItemAtPosition(position) != null) {
+                imgList.remove(parent.getItemAtPosition(position));
+                dataList.remove(parent.getItemAtPosition(position));
+                // 刷新图片
+                adapter.update(dataList);
+            }
+            return true;
+        }
+    };
 
     @Override
     public int getLayoutResId() {
@@ -143,38 +167,36 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView
     }
 
     /**
-     * 拍照
+     * 当前选择的图片的路径
      */
-    private View.OnClickListener firstListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            showCamera();
-        }
-    };
-    /**
-     * 从手机相册中选择的监听事件
-     */
-    private View.OnClickListener secondListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            choicePicture(5 - allListPic.size(), MODE_MULTI);
-        }
-    };
-    private String[] CoolectARR = {"公共设施", "基础资源", "物品遗失", "游客走失", "游客密度过载", "其他"};
-    @OnClick({R.id.include_img_back, R.id.fg_mine_qure,R.id.btn_typeshijian})
+    private String mImagePath;
+
+    private String[] CoolectARR = {"主机故障", "传感器故障", "电源故障", "测试场地线路故障", "内置程序出错", "其他"};
+    @OnClick({R.id.include_img_back, R.id.fg_mine_qure,R.id.btn_typeshijian,R.id.collect_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.collect_time:
+                DatePicker picker = new DatePicker(getActivity(), DatePicker.YEAR_MONTH_DAY);
+                picker.setGravity(Gravity.BOTTOM);
+                picker.setWidth((int) (picker.getScreenWidthPixels()));
+                picker.setRangeStart(2016, 10, 14);
+                picker.setRangeEnd(2020, 10, 10);
+                picker.setSelectedItem(2019, 1,29);
+                picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                    @Override
+                    public void onDatePicked(String year, String month, String day) {
+                        mTime = year + "-" + month+"-"+day;
+                        mTvTime.setText(mTime);
+                    }
+
+                });
+                picker.show();
+                break;
             case R.id.include_img_back:
                 _mActivity.onBackPressed();
-                if (ObjectUtils.isNotEmpty(audioRecordPopupWindow) && audioRecordPopupWindow
-                        .isShowing()) {
-                    animationDrawable.stop();
-                    audioRecordPopupWindow.dismiss();
-                }
-                RecordMedia.stop();
                 break;
             case R.id.fg_mine_qure://点击上报
-                ToastUtils.showToast("上报成功");
+                upData();
                 break;
             case R.id.btn_typeshijian:
                 Utils.showPicker(getActivity(), CoolectARR, new Utils.onBackListener() {
@@ -188,224 +210,219 @@ public class IndexPoliceXqFragment extends BaseFragment implements AdapterView
         }
     }
 
-    /**
-     * 跳转到系统相机
-     */
-    private File mTmpFile;
+    private void upData() {
+        File file = UpFileUtils.getFileformpathandsave(dataList.get(0));
+        OkHttpUtils.post()
+                .url(Constant.BASE_URL+"imec/uploadBreakdownEvent")
+                .addParams("stationID","34")
+                .addParams("deviceID","34")
+                .addParams("submitperson","张三")
+                .addParams("submittime",mTime)
+                .addParams("eventstatus","状态好")
+                .addParams("eventtype","类型")
+                .addParams("eventdesc","描述")
+                .addParams("eventIsCheck","0")
+                .addFile("file","yan01.png",file)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showToast("上报失败!");
+                    }
 
-    private void showCamera() {
-        // 跳转到系统照相机
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(_mActivity.getPackageManager()) != null) {
-            // 设置系统相机拍照后的输出路径
-            // 创建临时文件
-            mTmpFile = new File(Environment.getExternalStorageDirectory() + "/DaQI/Img", "temp" +
-                    System.currentTimeMillis() + ".jpg");
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
-            startActivityForResult(cameraIntent, Constant.REQUEST_CAMERA);
-        } else {
-            ToastUtils.showToast("没找到相机");
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ToastUtils.showToast("上报成功");
+                    }
+                });
+
+    }
+
+    /**
+     * 上传图片GridView Item单击监听
+     */
+    private AdapterView.OnItemClickListener mItemClick = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // 添加图片
+            if (parent.getItemAtPosition(position) == null) {
+                // showPictureDailog();//Dialog形式
+                ImageUtils.showPicker(getActivity(),
+                        ImageUtils.photoArr, new ImageUtils.onBackListener() {
+
+                            @Override
+                            public void getItem(int pos, String item) {
+                                if (pos == 0) {
+                                    takePhoto();
+                                } else {
+                                    pickImage();
+                                }
+                            }
+                        });
+            } else {
+            }
         }
-        popupWindow.dismiss();
-    }
-
+    };
     /**
-     * 从手机相册中选择
+     * 拍照获取图片
      */
-    private ArrayList<HashMap<String, String>> allListPic = new ArrayList<>();
-    public static final int MODE_MULTI = 1;
-
-    private void choicePicture(int num, int model) {
-        popupWindow.dismiss();
-        Intent intent = new Intent(_mActivity, MultiImageSelectorActivity.class);
-        // 是否显示调用相机拍照
-        intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, false);
-        // 最大图片选择数量
-        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, num);
-        // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity
-        // .MODE_MULTI)
-        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, model);
-        // 默认选择
-      /*  if (imgList != null && imgList.size() > 0) {
-            intent.putExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, imgList);
-        }*/
-        startActivityForResult(intent, Constant.REQUEST_IMAGE);
-
+    private void takePhoto() {
+        // 执行拍照前，应该先判断SD卡是否存在
+        String SDState = Environment.getExternalStorageState();
+        if (SDState.equals(Environment.MEDIA_MOUNTED)) {
+            /**
+             * 通过指定图片存储路径，解决部分机型onActivityResult回调 data返回为null的情况
+             */
+            // 获取与应用相关联的路径
+            String imageFilePath = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA);
+            // 根据当前时间生成图片的名称
+            String timestamp = "/" + formatter.format(new Date()) + ".jpg";
+            // 通过路径创建保存文件
+            File imageFile = new File(imageFilePath, timestamp);
+            mImagePath = imageFile.getAbsolutePath();
+            // 获取文件的Uri
+            Uri imageFileUri = Uri.fromFile(imageFile);
+            // 告诉相机拍摄完毕输出图片到指定的Uri
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+            startActivityForResult(intent, SELECT_IMAGE_RESULT_CODE);
+        } else {
+            Toast.makeText(getActivity(), "内存卡不存在!", Toast.LENGTH_LONG).show();
+        }
     }
-
     /**
-     * 图片选择
+     * 选择图片的返回码
+     */
+    protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
+    /**
+     * 仿微信图片选择
+     */
+    private void pickImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                    getString(R.string.mis_permission_rationale),
+                    REQUEST_STORAGE_READ_ACCESS_PERMISSION);
+        } else {
+            if (Utils.isnotNull(imgList)) {
+                int maxNum = 5 - imgList.size();
+                MultiImageSelector selector = MultiImageSelector.create(getActivity());
+                // 是否要相机
+                selector.showCamera(false);
+                // 图片选择最大数量
+                selector.count(maxNum);
+                selector.multi();
+                selector.origin(mSelectPath);
+                selector.start(getActivity(), REQUEST_IMAGE);
+            } else {
+                int maxNum = 5;
+                MultiImageSelector selector = MultiImageSelector.create(getActivity());
+                // 是否要相机
+                selector.showCamera(false);
+                // 图片选择最大数量
+                selector.count(maxNum);
+                selector.multi();
+                selector.origin(mSelectPath);
+                selector.start(getActivity(), REQUEST_IMAGE);
+            }
+        }
+    }
+    /**
+     * 权限
      *
-     * @param
+     * @param permission  权限
+     * @param rationale   编码
+     * @param requestCode 返回编码
      */
-    public void showPictureSelectWindow() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.pop_picture_selected, null);
-        //拍照哦
-        Button photo = (Button) view.findViewById(R.id.btn_photo);
-        photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-                showCamera();
-            }
-        });
-        //相册选择
-        Button photoimg = (Button) view.findViewById(R.id.btn_img);
-        photoimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-                choicePicture(5 - allListPic.size(), MODE_MULTI);
-            }
-        });
-        Button btnCancel = (Button) view.findViewById(R.id.btn_picture_cancle);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (audioPopupWindow.isShowing()) {
-                    audioPopupWindow.dismiss();
-                }
-            }
-        });
-        audioPopupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        audioPopupWindow.setFocusable(true);
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        audioPopupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.white));
-        // 设置好参数之后再show
-        audioPopupWindow.showAtLocation(view, Gravity.BOTTOM, 10, 10);
+    private void requestPermission(final String permission, String rationale, final int
+            requestCode) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.mis_permission_dialog_title)
+                    .setMessage(rationale)
+                    .setPositiveButton(R.string.mis_permission_dialog_ok, new DialogInterface
+                            .OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(getActivity(), new
+                                            String[]{permission},
+                                    requestCode);
+                        }
+                    })
+                    .setNegativeButton(R.string.mis_permission_dialog_cancel, null)
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+        }
     }
 
-    private ArrayList<String> imgList = new ArrayList<>();
-    private String location = "";
+    /**
+     * 数据
+     */
+    String[] proj = {MediaStore.MediaColumns.DATA};
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_CAMERA) {
-            if (resultCode == RESULT_OK) {
-                LogUtils.e("调用相机返回" + mTmpFile.getAbsolutePath());
-                imgList.clear();
-                imgList.add(mTmpFile.getAbsolutePath());
-                initGridView(imgList);
+
+        // 第一个是拍照
+        if (requestCode == SELECT_IMAGE_RESULT_CODE && resultCode == RESULT_OK) {
+            String imagePath = "";
+            Uri uri = null;
+            // 有数据返回直接使用返回的图片地址
+            if (data != null && data.getData() != null) {
+                uri = data.getData();
+                Cursor cursor = getActivity().getContentResolver().query(uri, proj, null,
+                        null, null);
+                if (cursor == null) {
+                    uri = ImageUtils.getUri(getActivity(), data);
+                }
+                imagePath = ImageUtils.getFilePathByFileUri(getActivity(), uri);
+            } else {
+                // 无数据使用指定的图片路径
+                imagePath = mImagePath;
             }
-        } else if (requestCode == Constant.REQUEST_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                LogUtils.e("直接选择图片返回" + data.getStringArrayListExtra(MultiImageSelectorActivity
-                        .EXTRA_RESULT));
-                initGridView(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
+            imgList.addFirst(imagePath);
+            dataList.addFirst(imagePath);
+            // 刷新图片
+            adapter.update(dataList);
+            // 多图选择
+        } else if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
+            mSelectPath = data.getStringArrayListExtra(MultiImageSelector.EXTRA_RESULT);
+            StringBuilder sb = new StringBuilder();
+            for (String p : mSelectPath) {
+                sb.append(p);
+                sb.append(",");
             }
-        } else if (requestCode == Constant.REQUEST_LOCATION) {
-            if (resultCode == RESULT_OK) {
-                location = data.getStringExtra("location");
-                //event_place_value.setText(location);
+            String imagePathToatle = sb.toString();
+            String[] split = imagePathToatle.split(",");
+            for (int i = 0; i < split.length; i++) {
+                imgList.addFirst(split[i]);
+                dataList.addFirst(split[i]);
             }
+            adapter.update(dataList);
+
         }
     }
 
-    /**
-     * 初始化gridView
-     */
-    private SimpleAdapter simpleAdapter;
-    private String defult = "drawable//" + R.mipmap.defult_add;
-    private MyGridView emergency_grid_event;
-
-    private void initGridView(ArrayList<String> imgList) {
-        if (imgList.size() == 0) {
-            HashMap<String, String> addBtnMap = new HashMap<>();
-            addBtnMap.put("itemImage", defult);
-            allListPic.add(addBtnMap);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_STORAGE_READ_ACCESS_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pickImage();
+            }
         } else {
-            Iterator<HashMap<String, String>> result = allListPic.iterator();
-            while (result.hasNext()) {
-                Map<String, String> list = result.next();
-                if (list.get("itemImage").equals(defult)) {
-                    result.remove();
-                }
-            }
-            for (int i = 0; i < imgList.size(); i++) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("itemImage", imgList.get(i));
-                allListPic.add(hashMap);
-            }
-            this.imgList = imgList;
-            if (allListPic.size() < 4) {
-                HashMap<String, String> addBtnMap = new HashMap<>();
-                addBtnMap.put("itemImage", defult);
-                allListPic.add(addBtnMap);
-            }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-        setSimpleAdapter(allListPic);
-    }
-
-    private void setSimpleAdapter(ArrayList<HashMap<String, String>> allListPic) {
-        if (null == simpleAdapter) {
-            simpleAdapter = new SimpleAdapter(_mActivity,
-                    allListPic, R.layout.rounded_imageview_layout, new String[]{"itemImage"}, new
-                    int[]{R.id.rounded_item_image});
-        } else {
-            simpleAdapter.notifyDataSetChanged();
-        }
-        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Object data,
-                                        String textRepresentation) {
-                // TODO Auto-generated method stub
-                if (view instanceof RoundedImageView && data instanceof String) {
-                    RoundedImageView imageView = (RoundedImageView) view;
-                    String str = (String) data;
-                    if (str.equals(defult)) {
-                        imageView.setImageResource(R.mipmap.defult_add);
-                    } else {
-                        String result = "file://" + str;
-                        GlideUtils.GlideImg(_mActivity, result, imageView);
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-        });
-        exception_gridView.setAdapter(simpleAdapter);
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        HashMap<String, String> clickMap = allListPic.get(i);
-        if (!clickMap.get("itemImage").equals(defult)) {
-            if (allListPic.size() >= 4) {
-                if (!allListPic.get(3).get("itemImage").equals(defult)) {
-                    HashMap<String, String> addBtnMap = new HashMap<>();
-                    addBtnMap.put("itemImage", defult);
-                    allListPic.add(addBtnMap);
-                }
-            }
-            allListPic.remove(i);
-            setSimpleAdapter(allListPic);
-        }
-        return false;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
 }

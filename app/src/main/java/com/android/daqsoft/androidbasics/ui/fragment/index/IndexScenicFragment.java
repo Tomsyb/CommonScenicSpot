@@ -19,6 +19,7 @@ import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.Basebean;
 import com.android.daqsoft.androidbasics.ui.ActivityWebView;
 import com.android.daqsoft.androidbasics.ui.fragment.other.OtherFragment;
+import com.android.daqsoft.androidbasics.ui.fragment.text.TextFragment;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
@@ -138,7 +139,7 @@ public class IndexScenicFragment extends BaseFragment {
                                 ActivityUtils.startHtmlActivity(guifan, ActivityWebView.class);
                                 break;
                             case 3://开放时间
-                                ToastUtils.showToast("开发中...");
+                                start(TextFragment.newInstance());
                                 break;
                             case 4://景区交通
                                 start(OtherFragment.newInstance());

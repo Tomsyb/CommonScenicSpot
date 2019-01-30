@@ -2,17 +2,18 @@
     <string name="app_name">AndroidBasics</string>
     <string name="press_again_exit">再按一次退出程序</string>
 
-
+    <string name="mis_error_no_permission">无权限</string>
     <string name="home">首页</string>
     <string name="service">预订服务</string>
     <string name="guide">导游导览</string>
     <string name="mine">我的</string>
-
+    <string name="mis_permission_rationale">浏览图片需要您提供浏览存储的权限</string>
     <string name="search_hint">输入搜索</string>
-
+    <string name="mis_permission_dialog_title">权限拒绝</string>
+    <string name="mis_permission_dialog_ok">好</string>
+    <string name="mis_permission_dialog_cancel">拒绝</string>
     <!--首页部分文字-->
     <string name="index_title">首页</string>
-
     <string-array name="index_yiqi">
         <item>GM-4磁通门磁力仪</item>
         <item>ZD8B地电仪</item>
