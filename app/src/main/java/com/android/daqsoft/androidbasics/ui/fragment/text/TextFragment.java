@@ -132,22 +132,6 @@ public class TextFragment extends BaseFragment {
         }
     }
 
-    private CustomDialog logDialog;
 
-    /**
-     * 下面是加载框
-     */
-    private void showLoadingDialog() {
-        if (logDialog == null) {
-            logDialog = new CustomDialog(_mActivity, "加载中...");
-        }
-        logDialog.show();
-    }
-
-    private void dismissLoadingDialog() {
-        if (logDialog != null) {
-            logDialog.dismiss();
-        }
-    }
 
 }

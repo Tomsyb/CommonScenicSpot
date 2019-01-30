@@ -51,6 +51,10 @@ public class IndexScenicFragment extends BaseFragment {
     private String huanjin= "";
     private String yuanli= "";
     private String guifan= "";
+
+
+    private String stationName = "";
+    private String deviceId = "";
     /**
      * 数据
      */
@@ -59,12 +63,14 @@ public class IndexScenicFragment extends BaseFragment {
     private CommonAdapter<Basebean> adapter;
 
     //单列
-    public static IndexScenicFragment newInstance(String title,String huanjin,String yuanli,String guifan) {
+    public static IndexScenicFragment newInstance(String title,String huanjin,String yuanli,String guifan,String stationName,String deviceId) {
         Bundle args = new Bundle();
         args.putString("TITLE",title);
         args.putString("huanjin",huanjin);
         args.putString("yuanli",yuanli);
         args.putString("guifan",guifan);
+        args.putString("stationName",stationName);
+        args.putString("deviceId",deviceId);
         IndexScenicFragment fragment = new IndexScenicFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,19 +83,12 @@ public class IndexScenicFragment extends BaseFragment {
         huanjin = getArguments().getString("huanjin");
         yuanli = getArguments().getString("yuanli");
         guifan = getArguments().getString("guifan");
+        stationName = getArguments().getString("stationName");
+        deviceId = getArguments().getString("deviceId");
         getData();
     }
 
     private void getData() {
-        if (ObjectUtils.isNotEmpty(IApplication.SP.getString(Constant.JQGGLIST))){
-            JSONObject object = JSONObject.parseObject(IApplication.SP.getString(Constant.JQGGLIST));
-            JSONArray datasArray = object.getJSONArray("datas");
-            for (int i = 0; i < 3; i++) {
-                JSONObject obj = datasArray.getJSONObject(i);
-                String title = obj.getString("title");
-                titleIDList.add(obj.getString("id"));
-            }
-        }
         titleList.add("今日检测点位正常，未出现故障");
         titleList.add("机器需要维修");
         mRunText.setTextList(titleList);
@@ -148,7 +147,7 @@ public class IndexScenicFragment extends BaseFragment {
                                 ToastUtils.showToast("开发中...");
                                 break;
                             case 6://景区公告
-                                start(IndexPoliceXqFragment.newInstance());
+                                start(IndexPoliceXqFragment.newInstance(stationName,deviceId));
                                 break;
                             case 7://游记攻略
                                 ToastUtils.showToast("开发中...");

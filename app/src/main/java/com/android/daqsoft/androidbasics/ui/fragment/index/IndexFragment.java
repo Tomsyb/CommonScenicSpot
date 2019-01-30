@@ -150,7 +150,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                     @Override
                     public void onClick(View view) {
                         ((Main2Activity) getActivity()).startBrotherFragment(IndexScenicFragment
-                                .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),bean.getDeviceStandard()));
+                                .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),bean.getDeviceStandard(),bean.getDeviceStationID()+"",bean.getDeviceID()));
                     }
                 });
             }
@@ -276,7 +276,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                                     bean.setDeviceImage(obj.getString("deviceImage"));
                                     bean.setDeviceIsWarning(obj.getIntValue("deviceIsWarning"));
                                     bean.setDeviceStationName(obj.getString("deviceStationName"));
-                                    bean.setDeviceEnvironment(obj.getString("deviceEnvironment"));
+                                    bean.setDeviceEnvironment(obj.getString("deviceEnviorment"));
                                     bean.setDeviceTheory(obj.getString("deviceTheory"));
                                     bean.setDeviceStandard(obj.getString("deviceStandard"));
                                     mDatas.add(bean);
@@ -340,23 +340,8 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
     }
 
 
-    private CustomDialog logDialog;
 
-    /**
-     * 下面是加载框
-     */
-    private void showLoadingDialog() {
-        if (logDialog == null) {
-            logDialog = new CustomDialog(_mActivity, "加载中...");
-        }
-        logDialog.show();
-    }
 
-    private void dismissLoadingDialog() {
-        if (logDialog != null) {
-            logDialog.dismiss();
-        }
-    }
 
     @Override
     public void onRefresh() {

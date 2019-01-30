@@ -33,9 +33,11 @@ import android.widget.Toast;
 
 import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
+import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.ui.fragment.index.adapter.ImageUtils;
 import com.android.daqsoft.androidbasics.ui.fragment.index.adapter.UploadImageAdapter;
+import com.android.daqsoft.androidbasics.utils.ConstUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
 import com.android.daqsoft.androidbasics.utils.ToastUtils;
@@ -49,6 +51,7 @@ import com.android.daqsoft.androidbasics.view.audio.RecordTask;
 import com.android.daqsoft.androidbasics.view.suppertext.SuperTextView;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
@@ -70,6 +73,7 @@ import cn.qqtheme.framework.picker.DatePicker;
 import kr.co.namee.permissiongen.PermissionGen;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
 import okhttp3.Call;
 
 
@@ -84,6 +88,8 @@ import okhttp3.Call;
 public class IndexPoliceXqFragment extends BaseFragment{
     @BindView(R.id.include_img_back)
     ImageView mImgBack;
+    @BindView(R.id.tv_top)
+    TextView mTvYop;
     @BindView(R.id.include_tv_title)
     TextView mTvTitle;
     @BindView(R.id.grid_upload_pictures)
@@ -92,7 +98,13 @@ public class IndexPoliceXqFragment extends BaseFragment{
     Button mBtnshijian;
     @BindView(R.id.collect_time)
     TextView mTvTime;
+    @BindView(R.id.collect_di)
+    TextView mTvStatus;
+    @BindView(R.id.y_et_content_collect)
+    EditText mEtContent;
     private String mTime = "";
+    private String mStatus = "";
+    private String mType = "";
     /**
      * 选择图片的返回码
      */
@@ -100,7 +112,7 @@ public class IndexPoliceXqFragment extends BaseFragment{
     /**
      * 选择图片的返回码
      */
-    public final static int SELECT_IMAGE_RESULT_CODE = 200;
+    public final static int SELECT_IMAGE_RESULT_CODE = 210;
     /**
      * 图片上传Adapter
      */
@@ -109,9 +121,13 @@ public class IndexPoliceXqFragment extends BaseFragment{
      * 选择的集合
      */
     private ArrayList<String> mSelectPath;
+    private String stationName = "";
+    private String deviceId = "";
     //单列
-    public static IndexPoliceXqFragment newInstance() {
+    public static IndexPoliceXqFragment newInstance(String stationName,String deviceId) {
         Bundle args = new Bundle();
+        args.putString("stationName",stationName);
+        args.putString("deviceId",deviceId);
         IndexPoliceXqFragment fragment = new IndexPoliceXqFragment();
         fragment.setArguments(args);
         return fragment;
@@ -132,6 +148,9 @@ public class IndexPoliceXqFragment extends BaseFragment{
      */
     private LinkedList<String> dataList = new LinkedList<String>();
     private void initView() {
+        stationName = getArguments().getString("stationName");
+        deviceId = getArguments().getString("deviceId");
+        mTvYop.setText("注意:  当前台站代码("+stationName+")  设备ID("+deviceId+")   处理人("+ IApplication.SP.getString("account")+")");
         mTvTitle.setText("一键报警");
         // 图片上传初始化第一个添加按钮数据
         dataList.addLast(null);
@@ -172,7 +191,8 @@ public class IndexPoliceXqFragment extends BaseFragment{
     private String mImagePath;
 
     private String[] CoolectARR = {"主机故障", "传感器故障", "电源故障", "测试场地线路故障", "内置程序出错", "其他"};
-    @OnClick({R.id.include_img_back, R.id.fg_mine_qure,R.id.btn_typeshijian,R.id.collect_time})
+    private String[] sTatusARR = {"仪器待维修", "仪器恢复正常", "其他"};
+    @OnClick({R.id.include_img_back, R.id.fg_mine_qure,R.id.btn_typeshijian,R.id.collect_time,R.id.collect_di})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.collect_time:
@@ -203,7 +223,18 @@ public class IndexPoliceXqFragment extends BaseFragment{
 
                     @Override
                     public void getItem(int pos, String item) {
+                        mType = item;
                         mBtnshijian.setText(item);
+                    }
+                });
+                break;
+            case R.id.collect_di:
+                Utils.showPicker(getActivity(), sTatusARR, new Utils.onBackListener() {
+
+                    @Override
+                    public void getItem(int pos, String item) {
+                        mStatus = item;
+                        mTvStatus.setText(item);
                     }
                 });
                 break;
@@ -211,30 +242,40 @@ public class IndexPoliceXqFragment extends BaseFragment{
     }
 
     private void upData() {
-        File file = UpFileUtils.getFileformpathandsave(dataList.get(0));
-        OkHttpUtils.post()
-                .url(Constant.BASE_URL+"imec/uploadBreakdownEvent")
-                .addParams("stationID","34")
-                .addParams("deviceID","34")
-                .addParams("submitperson","张三")
-                .addParams("submittime",mTime)
-                .addParams("eventstatus","状态好")
-                .addParams("eventtype","类型")
-                .addParams("eventdesc","描述")
-                .addParams("eventIsCheck","0")
-                .addFile("file","yan01.png",file)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        ToastUtils.showToast("上报失败!");
-                    }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ToastUtils.showToast("上报成功");
-                    }
-                });
+        String cntent = mEtContent.getText().toString().trim();
+        if (Utils.isnotNull(cntent)&&Utils.isnotNull(mTime)&&Utils.isnotNull(mStatus)&&Utils.isnotNull(mType)&&dataList.size()>0){
+            showLoadingDialog();
+            PostFormBuilder postFormBuilder = OkHttpUtils.post()
+                    .url(Constant.BASE_URL + "imec/uploadBreakdownEvent")
+                    .addParams("stationID", stationName)
+                    .addParams("deviceID", deviceId)
+                    .addParams("submitPerson", IApplication.SP.getString("account"))
+                    .addParams("submitTime", mTime)
+                    .addParams("eventStatus", mStatus)
+                    .addParams("eventType", mType)
+                    .addParams("eventDesc", cntent)
+                    .addParams("eventIsCheck", "0");
+            for (int i = 0; i < dataList.size(); i++) {
+                File file = UpFileUtils.getFileformpathandsave(dataList.get(i));
+                postFormBuilder.addFile("file", "dizheng"+i+"yanb.png",file);
+            }
+            postFormBuilder.build().execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    ToastUtils.showToast("上报失败!");
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    dismissLoadingDialog();
+                    _mActivity.onBackPressed();
+                    ToastUtils.showToast("上报成功");
+                }
+            });
+        }else {
+            ToastUtils.showToast("请输入完成上报信息!");
+        }
 
     }
 
@@ -310,28 +351,25 @@ public class IndexPoliceXqFragment extends BaseFragment{
                     getString(R.string.mis_permission_rationale),
                     REQUEST_STORAGE_READ_ACCESS_PERMISSION);
         } else {
-            if (Utils.isnotNull(imgList)) {
-                int maxNum = 5 - imgList.size();
-                MultiImageSelector selector = MultiImageSelector.create(getActivity());
-                // 是否要相机
-                selector.showCamera(false);
-                // 图片选择最大数量
-                selector.count(maxNum);
-                selector.multi();
-                selector.origin(mSelectPath);
-                selector.start(getActivity(), REQUEST_IMAGE);
-            } else {
-                int maxNum = 5;
-                MultiImageSelector selector = MultiImageSelector.create(getActivity());
-                // 是否要相机
-                selector.showCamera(false);
-                // 图片选择最大数量
-                selector.count(maxNum);
-                selector.multi();
-                selector.origin(mSelectPath);
-                selector.start(getActivity(), REQUEST_IMAGE);
-            }
+            choicePicture(4-dataList.size(),1);
         }
+    }
+
+    private void choicePicture(int num, int model) {
+        Intent intent = new Intent(getActivity(), MultiImageSelectorActivity.class);
+        // 是否显示调用相机拍照
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, false);
+        // 最大图片选择数量
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, num);
+        // 设置模式 (支持 单选/MultiImageSelectorActivity.MODE_SINGLE 或者 多选/MultiImageSelectorActivity
+        // .MODE_MULTI)
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, model);
+        // 默认选择
+      /*  if (imgList != null && imgList.size() > 0) {
+            intent.putExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, imgList);
+        }*/
+        startActivityForResult(intent, Constant.REQUEST_IMAGE);
+
     }
     /**
      * 权限
@@ -395,7 +433,7 @@ public class IndexPoliceXqFragment extends BaseFragment{
             // 刷新图片
             adapter.update(dataList);
             // 多图选择
-        } else if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
+        } else if (requestCode == Constant.REQUEST_IMAGE && resultCode == RESULT_OK) {
             mSelectPath = data.getStringArrayListExtra(MultiImageSelector.EXTRA_RESULT);
             StringBuilder sb = new StringBuilder();
             for (String p : mSelectPath) {
