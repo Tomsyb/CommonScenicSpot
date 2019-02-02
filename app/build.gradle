@@ -110,5 +110,6 @@ dependencies {
     implementation('cn.qqtheme.framework:WheelPicker:1.5.5') {
         exclude group: 'com.android.support'
     }
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+    compile 'com.github.PhilJay:MPAndroidChart-Realm:v2.0.2@aar'
 }

@@ -150,8 +150,7 @@ public class IndexScenicFragment extends BaseFragment {
                                 start(IndexPoliceXqFragment.newInstance(stationName,deviceId));
                                 break;
                             case 7://游记攻略
-                                ToastUtils.showToast("开发中...");
-                                //start(IndexScenicTravelsFragment.newInstance());
+                                start(IndexScenicTravelsFragment.newInstance(deviceId));
                                 break;
                             default:
                                 break;

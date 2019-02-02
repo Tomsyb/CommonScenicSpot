@@ -4,9 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <include layout="@layout/include_title_main"/>
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_centerInParent="true"
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_centerInParent="true"
+                android:id="@+id/chart2"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_centerInParent="true"
+                android:id="@+id/chart3"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_centerInParent="true"
+                android:id="@+id/chart4"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

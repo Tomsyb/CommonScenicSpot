@@ -18,21 +18,26 @@ import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
+import com.android.daqsoft.androidbasics.event.StatusSerarch;
 import com.android.daqsoft.androidbasics.http.RequestData;
 import com.android.daqsoft.androidbasics.ui.fragment.index.bean.ScenicTravelsBean;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.CommonUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.ObjectUtils;
+import com.android.daqsoft.androidbasics.utils.Utils;
 import com.android.daqsoft.androidbasics.utils.img.GlideUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -57,26 +62,22 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
 
     @BindView(R.id.include_search)
     EditText mEtSearch;
-    /**
-     * 当前默认页数
-     */
-    private int mPage = 1;
+
     /**
      * 搜索 关键字
      */
     private String searchName = "";
-    /**
-     * 数据
-     */
-    private List<ScenicTravelsBean> mDatas = new ArrayList<>();
-    private BaseQuickAdapter<ScenicTravelsBean, BaseViewHolder> mAdapter;
+
+    private BaseQuickAdapter<StatusSerarch,BaseViewHolder> mAdapter;
+    private String deviceId = "";
 
     /**
      *
      * @return 单例
      */
-    public static IndexScenicTravelsFragment newInstance() {
+    public static IndexScenicTravelsFragment newInstance(String deviceId_) {
         Bundle args = new Bundle();
+        args.putString("deviceId",deviceId_);
         IndexScenicTravelsFragment fragment = new IndexScenicTravelsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -96,114 +97,80 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
     private void iniAdapter() {
         mRv.setHasFixedSize(true);
         mRv.setLayoutManager(new LinearLayoutManager(_mActivity));
-        mAdapter = new BaseQuickAdapter<ScenicTravelsBean, BaseViewHolder>(R.layout.item_common_bigimg, mDatas) {
+        mAdapter = new BaseQuickAdapter<StatusSerarch, BaseViewHolder>(R.layout.item_guide_enfor_note,null) {
             @Override
-            protected void convert(BaseViewHolder helper, final ScenicTravelsBean item) {
-                if (item.getRecommended().equals("0")){//1：推荐
-                    helper.getView(R.id.tv_tuijain).setVisibility(View.GONE);
+            protected void convert(BaseViewHolder helper, StatusSerarch item) {
+                helper.setText(R.id.tv_name,item.getId());
+                if (item.getIschecked()==0){
+                    helper.setText(R.id.tv_statuss,"待处理");
+                    helper.setBackgroundRes(R.id.tv_statuss,R.drawable.bg_common_solid_orange);
                 }else {
-                    helper.getView(R.id.tv_tuijain).setVisibility(View.VISIBLE);
+                    helper.setBackgroundRes(R.id.tv_statuss,R.drawable.bg_common_solid_green);
+                    helper.setText(R.id.tv_statuss,"已处理");
                 }
-                if (ObjectUtils.isNotEmpty(item.getData())){
-                    String eDate = CommonUtils.getEDate(item.getData());
-                    String[] split = eDate.split(",");
-                    helper.setText(R.id.bihimg_tv_data,split[0]);
-                    helper.setText(R.id.bihimg_tv_year,split[2]);
-                    helper.setText(R.id.bihimg_tv_mouth,split[1]);
-                }else {
-                    helper.setText(R.id.bihimg_tv_data,"0");
-                    helper.setText(R.id.bihimg_tv_year,"0");
-                    helper.setText(R.id.bihimg_tv_mouth,"0");
-                }
-                helper.setText(R.id.item_bigimg_tv_title,item.getTitle());
-                helper.setText(R.id.bigima_tv_givePoint,item.getGoodNum());
-                helper.setText(R.id.bigima_tv_collection,item.getXinNum());
-                helper.setText(R.id.bigima_tv_viewCount,item.getMsgNum());
-                helper.setText(R.id.item_bigimg_tv_content,item.getContent());
-                GlideUtils.GlideImg(_mActivity,item.getImgPath(), (ImageView) helper.getView(R.id.item_bigimg_img_main));
-                helper.setOnClickListener(R.id.item_bigimg_ll, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                });
+                helper.setText(R.id.tv_namesf,item.getStatus());
+                helper.setText(R.id.tv_mechanism,item.getType());
+                helper.setText(R.id.tv_place,item.getPeople()+"于 "+item.getTime()+"  上报");
             }
         };
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                loadmore();
-            }
-        }, mRv);
-        mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
         mRv.setAdapter(mAdapter);
 
     }
 
-    /**
-     * 获取数据
-     * @param isRefresh 是否刷新
-     */
-    private void getData(final boolean isRefresh) {
-        IApplication.showLoadingDialog(_mActivity);
-        if (isRefresh) {
-            mPage = 1;
-            mAdapter.setEnableLoadMore(false);//这里的作用是防止下拉刷新的时候还可以上拉加载
-        }
-        RequestData.gettravelStrategy(mPage, searchName, new RequestData.OnDataCallBack() {
-            @Override
-            public void onSuccess(String response) {
-                LogUtils.e(response);
-                try {
-                    JSONObject object = JSONObject.parseObject(response);
-                    JSONArray datasArray = object.getJSONArray("datas");
-                    List<ScenicTravelsBean> mList = new ArrayList<>();
-                    for (int i = 0; i < datasArray.size(); i++) {
-                        JSONObject obj = datasArray.getJSONObject(i);
-                        ScenicTravelsBean bean = new ScenicTravelsBean();
-                        bean.setTitle(CommonUtils.isNotEmpty(obj.getString("title")));
-                        bean.setContent(CommonUtils.isNotEmpty(obj.getString("digest")));
-                        bean.setImgPath(CommonUtils.isNotEmpty(obj.getString("cover")));
-                        bean.setGoodNum(CommonUtils.isNotEmpty(obj.getString("givePoint")));
-                        bean.setXinNum(CommonUtils.isNotEmpty(obj.getString("collection")));
-                        bean.setMsgNum(CommonUtils.isNotEmpty(obj.getString("viewCount")));
-                        bean.setRecommended(CommonUtils.isNotEmpty(obj.getString("recommended")));
-                        bean.setId(CommonUtils.isNotEmpty(obj.getString("id")));
-                        bean.setData(CommonUtils.isNotEmpty(obj.getString("updateTime")));
-                        mList.add(bean);
-                    }
-                    setData(isRefresh, mList);
-                }catch (Exception e){
-                    if (ObjectUtils.isNotEmpty(mViewAnimator)){
+
+    private void getData(){
+        mRefreshLayout.setRefreshing(true);
+        OkHttpUtils.get()
+                .url("http://2h15419d06.51mypc.cn:24420/imec/getLastSixEvent")
+                .addParams("device_ID",deviceId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
                         mViewAnimator.setDisplayedChild(1);
+                        mRefreshLayout.setRefreshing(false);
                     }
-                    LogUtils.e(e.toString());
-                }
 
-            }
-
-            @Override
-            public void onFail() {
-                if (ObjectUtils.isNotEmpty(mViewAnimator)){
-                    mViewAnimator.setDisplayedChild(1);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                IApplication.dismissLoadingDialog();
-                if (ObjectUtils.isNotEmpty(mRefreshLayout) && mRefreshLayout.isRefreshing()) {
-                    mRefreshLayout.setRefreshing(false);
-                }
-                mAdapter.setEnableLoadMore(true);
-            }
-        });
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            mRefreshLayout.setRefreshing(false);
+                            JSONObject object = JSONObject.parseObject(response);
+                            if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
+                                mViewAnimator.setDisplayedChild(0);
+                                JSONArray data = object.getJSONArray("data");
+                                List<StatusSerarch> mlist = new ArrayList<>();
+                                for (int i = 0; i < data.size(); i++) {
+                                    JSONObject obj = data.getJSONObject(i);
+                                    StatusSerarch bean = new StatusSerarch();
+                                    bean.setId(obj.getString("deviceID"));
+                                    bean.setPeople(obj.getString("submitPerson"));
+                                    bean.setStatus(obj.getString("eventStatus"));
+                                    bean.setTime(obj.getString("submitTime"));
+                                    bean.setType(obj.getString("eventType"));
+                                    mlist.add(bean);
+                                }
+                                mAdapter.setNewData(mlist);
+                            }else {
+                                mViewAnimator.setDisplayedChild(1);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            mViewAnimator.setDisplayedChild(1);
+                        }
+                    }
+                });
     }
-
     /**
      * 初始View
      */
     private void initView() {
-        TvTitle.setText("游记攻略");
+        try {
+            deviceId = getArguments().getString("deviceId");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        TvTitle.setText("故障检索");
         mEtSearch.setOnKeyListener(this);
         mRefreshLayout.setOnRefreshListener(this);
     }
@@ -221,49 +188,21 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
 
     @Override
     public void onRefresh() {
-        getData(true);
+        getData();
     }
 
-    /**
-     * 加载跟多
-     */
-    private void loadmore() {
-        getData(false);
-    }
 
-    /**
-     * 设置数据
-     * @param isrefresh 是否刷新
-     * @param mDatas 数据
-     */
-    private void setData(boolean isrefresh,  List<ScenicTravelsBean> mDatas) {
-        mPage++;
-        final int size = mDatas == null ? 0 : mDatas.size();
-        if (isrefresh) {
-            if (size>0){
-                mViewAnimator.setDisplayedChild(0);
-                mAdapter.setNewData(mDatas);
-            }else {
-                mViewAnimator.setDisplayedChild(1);
-            }
-        } else {//上啦加载
-            if (size > 0) {
-                mAdapter.addData(mDatas);
-            }
-        }
-        if (size < Constant.API.limitPage) {
-            //第一页如果不够一页就不显示没有更多数据布局
-            mAdapter.loadMoreEnd(isrefresh);
-        } else {
-            mAdapter.loadMoreComplete();
-        }
-    }
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         String strSearch = mEtSearch.getText().toString().trim();
         if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN) {
-            searchName = strSearch;
-            getData(true);
+            if (Utils.isnotNull(strSearch)){
+                deviceId = strSearch;
+                getData();
+            }else {
+                deviceId = getArguments().getString("deviceId");
+                getData();
+            }
             disMissKeyBorad();
             return true;
         }

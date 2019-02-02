@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.ui.fragment.index.IndexFragment;
+import com.android.daqsoft.androidbasics.ui.fragment.index.IndexScenicTravelsFragment;
 import com.android.daqsoft.androidbasics.utils.BarUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
 import com.android.daqsoft.androidbasics.utils.StatusBarCompat;
@@ -141,7 +142,7 @@ public class Main2Activity extends SupportActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
-
+            loadRootFragment(R.id.fl_container, IndexScenicTravelsFragment.newInstance("3120IEGA4400"));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
