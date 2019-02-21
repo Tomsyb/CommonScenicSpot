@@ -11,6 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="@dimen/dp_10"
+                android:padding="@dimen/dp_10"
+                android:text="监测数据每10秒刷新一次"
+                android:textColor="@color/orange"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <com.github.mikephil.charting.charts.LineChart
                 android:layout_centerInParent="true"
                 android:id="@+id/chart"
@@ -34,6 +42,7 @@
                 android:id="@+id/chart4"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
+
         </LinearLayout>
 
     </ScrollView>

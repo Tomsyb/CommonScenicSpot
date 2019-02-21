@@ -19,6 +19,8 @@ import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.Basebean;
 import com.android.daqsoft.androidbasics.ui.ActivityWebView;
 import com.android.daqsoft.androidbasics.ui.fragment.other.OtherFragment;
+import com.android.daqsoft.androidbasics.ui.fragment.sbsx.SbsxFragment;
+import com.android.daqsoft.androidbasics.ui.fragment.text.NowFragment;
 import com.android.daqsoft.androidbasics.ui.fragment.text.TextFragment;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.LogUtils;
@@ -55,6 +57,11 @@ public class IndexScenicFragment extends BaseFragment {
 
     private String stationName = "";
     private String deviceId = "";
+    private String deviceIP = "";
+    private String devicePort = "";
+    private String devideUsr = "";
+    private String devicePwd = "";
+
     /**
      * 数据
      */
@@ -63,7 +70,10 @@ public class IndexScenicFragment extends BaseFragment {
     private CommonAdapter<Basebean> adapter;
 
     //单列
-    public static IndexScenicFragment newInstance(String title,String huanjin,String yuanli,String guifan,String stationName,String deviceId) {
+    public static IndexScenicFragment newInstance(String title,String huanjin,String yuanli,
+                                                  String guifan,String stationName,String deviceId,
+                                                  String deviceIP,String devicePort,String devideUsr,
+                                                  String devicePwd) {
         Bundle args = new Bundle();
         args.putString("TITLE",title);
         args.putString("huanjin",huanjin);
@@ -71,6 +81,10 @@ public class IndexScenicFragment extends BaseFragment {
         args.putString("guifan",guifan);
         args.putString("stationName",stationName);
         args.putString("deviceId",deviceId);
+        args.putString("deviceIP",deviceIP);
+        args.putString("devicePort",devicePort);
+        args.putString("devideUsr",devideUsr);
+        args.putString("devicePwd",devicePwd);
         IndexScenicFragment fragment = new IndexScenicFragment();
         fragment.setArguments(args);
         return fragment;
@@ -85,6 +99,10 @@ public class IndexScenicFragment extends BaseFragment {
         guifan = getArguments().getString("guifan");
         stationName = getArguments().getString("stationName");
         deviceId = getArguments().getString("deviceId");
+        deviceIP = getArguments().getString("deviceIP");
+        devicePort = getArguments().getString("devicePort");
+        devideUsr = getArguments().getString("devideUsr");
+        devicePwd = getArguments().getString("devicePwd");
         getData();
     }
 
@@ -138,19 +156,31 @@ public class IndexScenicFragment extends BaseFragment {
                                 ActivityUtils.startHtmlActivity(guifan, ActivityWebView.class);
                                 break;
                             case 3://开放时间
-                                start(TextFragment.newInstance());
+                                start(TextFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd));
                                 break;
                             case 4://景区交通
-                                start(OtherFragment.newInstance());
+                                start(OtherFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd));
                                 break;
-                            case 5://景区文化
-                                ToastUtils.showToast("开发中...");
+                            case 5://当前数据
+                                start(NowFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd));
                                 break;
                             case 6://景区公告
                                 start(IndexPoliceXqFragment.newInstance(stationName,deviceId));
                                 break;
                             case 7://游记攻略
                                 start(IndexScenicTravelsFragment.newInstance(deviceId));
+                                break;
+                            case 8://设备属性
+                                start(SbsxFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd,stationName,0));
+                                break;
+                            case 9://设备状态
+                                start(SbsxFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd,stationName,1));
+                                break;
+                            case 10://网络配置
+                                start(SbsxFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd,stationName,2));
+                                break;
+                            case 11://测量参数
+                                start(SbsxFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd,stationName,3));
                                 break;
                             default:
                                 break;

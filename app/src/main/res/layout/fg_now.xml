@@ -20,24 +20,11 @@
         android:background="@color/text_gray" />
     <TextView
         android:layout_gravity="center"
-        android:text="测试数据在上面显示窝~~~"
+        android:text="当前数据在上面显示窝~~~"
         android:textSize="14sp"
         android:textColor="@color/orange"
         android:padding="@dimen/dp_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <Button
-        android:layout_marginBottom="@dimen/dp_10"
-        android:id="@+id/btn_start"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:textSize="14sp"
-        android:layout_marginTop="40dp"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:text="开始测试"
-        android:background="@drawable/robot_commit"
-        android:layout_width="match_parent"
-        android:layout_height="45dp" />
 
 </LinearLayout>

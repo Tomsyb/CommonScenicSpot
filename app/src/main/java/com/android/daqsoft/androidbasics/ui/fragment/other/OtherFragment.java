@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.android.daqsoft.androidbasics.R;
 import com.android.daqsoft.androidbasics.base.BaseFragment;
+import com.android.daqsoft.androidbasics.common.Constant;
+import com.android.daqsoft.androidbasics.utils.ToastUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,6 +25,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.GetBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -52,9 +55,21 @@ public class OtherFragment extends BaseFragment implements
     @BindView(R.id.chart4)
     LineChart mChart4;
     private Timer timer;
+    private String deviceId = "";
+    private String deviceIP = "";
+    private String devicePort = "";
+    private String devideUsr = "";
+    private String devicePwd = "";
     //单列
-    public static OtherFragment newInstance() {
+    public static OtherFragment newInstance(String deviceId,
+                                            String deviceIP, String devicePort, String devideUsr,
+                                            String devicePwd) {
         Bundle args = new Bundle();
+        args.putString("deviceId", deviceId);
+        args.putString("deviceIP", deviceIP);
+        args.putString("devicePort", devicePort);
+        args.putString("devideUsr", devideUsr);
+        args.putString("devicePwd", devicePwd);
         OtherFragment fragment = new OtherFragment();
         fragment.setArguments(args);
         return fragment;
@@ -71,7 +86,11 @@ public class OtherFragment extends BaseFragment implements
     @Override
     public void init(Bundle savedInstanceState) {
         includeTvTitle.setText("数据曲线");
-
+        deviceId = getArguments().getString("deviceId");
+        deviceIP = getArguments().getString("deviceIP");
+        devicePort = getArguments().getString("devicePort");
+        devideUsr = getArguments().getString("devideUsr");
+        devicePwd = getArguments().getString("devicePwd");
 
 
         mChart.setOnChartValueSelectedListener(this);
@@ -129,14 +148,22 @@ public class OtherFragment extends BaseFragment implements
                 message.what=0;
                 mHandler.sendMessage(message);
             }
-        },0,3000);//每隔一秒使用handler发送一下消息,也就是每隔一秒执行一次,一直重复执行
+        },0,10000);//每隔一秒使用handler发送一下消息,也就是每隔一秒执行一次,一直重复执行
 
     }
 
     private void getData(){
-        OkHttpUtils.get()
-                .url("http://2h15419d06.51mypc.cn:24420/imec/getDeviceAttribute?deviceID=1&deviceIP=1&devicePort=1&devideUsr=1&devicePwd=1&firParameter=1&secParameter=1")
-                .build()
+        GetBuilder getBuilder = OkHttpUtils.get()
+                .url(Constant.BASE_URL + "imec/getDeviceAttribute")
+                .addParams("deviceID", deviceId)
+                .addParams("deviceIP", deviceIP)
+                .addParams("devicePort", devicePort)
+                .addParams("devideUsr", devideUsr)
+                .addParams("devicePwd", devicePwd)
+                .addParams("firParameter", "dat")
+                .addParams("secParameter","5");
+
+        getBuilder.build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -150,10 +177,18 @@ public class OtherFragment extends BaseFragment implements
                             if (object.getIntValue("resultCode")==0){
                                 String value = object.getString("data");
                                 String[] split = value.split(" ");
-                                addEntry(split[0],split[4]);
-                                addEntry2(split[1],split[5]);
-                                addEntry3(split[2],split[6]);
-                                addEntry4(split[3],split[7]);
+                                if (split[4].equals("02")&&split[5].equals("04")){
+                                    addEntry(split[6],split[10]);
+                                    addEntry2(split[7],split[11]);
+                                    addEntry3(split[8],split[12]);
+                                    addEntry4(split[9],split[13]);
+                                }else if (split[4].equals("60")&&split[5].equals("06")){
+                                    ToastUtils.showToast("请到当前数据查看!");
+                                    timer.cancel();
+                                }else {
+                                    timer.cancel();
+                                    ToastUtils.showToast("暂无数据!");
+                                }
                             }
                         }catch (Exception e){
                             e.printStackTrace();
@@ -175,7 +210,11 @@ public class OtherFragment extends BaseFragment implements
         timer.cancel();
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        timer.cancel();
+    }
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {

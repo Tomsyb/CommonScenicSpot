@@ -50,6 +50,33 @@ public class IndexYiBean {
     private String deviceEnviorment;// 观察环境
     private String deviceTheory;//原理
     private String deviceStandard;//一起规范
+    private String devicePort;
+    private String deviceUsr;
+    private String devicePwd;
+
+    public String getDevicePort() {
+        return devicePort;
+    }
+
+    public void setDevicePort(String devicePort) {
+        this.devicePort = devicePort;
+    }
+
+    public String getDevideUsr() {
+        return deviceUsr;
+    }
+
+    public void setDevideUsr(String devideUsr) {
+        this.deviceUsr = devideUsr;
+    }
+
+    public String getDevicePwd() {
+        return devicePwd;
+    }
+
+    public void setDevicePwd(String devicePwd) {
+        this.devicePwd = devicePwd;
+    }
 
     public String getDeviceStandard() {
         return deviceStandard;

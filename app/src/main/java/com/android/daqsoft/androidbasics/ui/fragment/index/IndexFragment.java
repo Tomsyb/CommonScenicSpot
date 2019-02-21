@@ -150,7 +150,8 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                     @Override
                     public void onClick(View view) {
                         ((Main2Activity) getActivity()).startBrotherFragment(IndexScenicFragment
-                                .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),bean.getDeviceStandard(),bean.getDeviceStationID()+"",bean.getDeviceID()));
+                                .newInstance(bean.getDeviceName(),bean.getDeviceEnvironment(),bean.getDeviceTheory(),
+                                        bean.getDeviceStandard(),bean.getDeviceStationID()+"",bean.getDeviceID(),bean.getDeviceIP(),bean.getDevicePort(),bean.getDevideUsr(),bean.getDevicePwd()));
                     }
                 });
             }
@@ -257,6 +258,7 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                             JSONObject object = JSONObject.parseObject(response);
                             JSONArray dataArr = object.getJSONArray("data");
                             if (object.getIntValue("resultCode") == 0 && dataArr.size() > 0) {
+                                mTvToaday.setText(dataArr.size()+"");
                                 for (int i = 0; i < dataArr.size(); i++) {
                                     JSONObject obj = dataArr.getJSONObject(i);
                                     IndexYiBean bean = new IndexYiBean();
@@ -279,6 +281,9 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                                     bean.setDeviceEnvironment(obj.getString("deviceEnviorment"));
                                     bean.setDeviceTheory(obj.getString("deviceTheory"));
                                     bean.setDeviceStandard(obj.getString("deviceStandard"));
+                                    bean.setDevicePort(obj.getString("devicePort"));
+                                    bean.setDevideUsr(obj.getString("deviceUsr"));
+                                    bean.setDevicePwd(obj.getString("devicePwd"));
                                     mDatas.add(bean);
                                 }
                                 mAdapter.notifyDataSetChanged();

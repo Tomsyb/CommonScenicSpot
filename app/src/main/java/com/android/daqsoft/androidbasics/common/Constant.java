@@ -273,7 +273,12 @@ public class Constant {
                 R.drawable.home_entrance_panorama,
                 R.drawable.home_entrance_service,
                 R.drawable.home_entrance_robot,
-                R.drawable.home_entrance_report};
+                R.drawable.home_entrance_report,
+                R.drawable.home_entrance_sbsx,
+                R.drawable.home_entrance_sbzt,
+                R.drawable.home_entrance_wlpz,
+                R.drawable.home_entrance_clcs
+        };
         String[] dataArr = context.getResources().getStringArray(R.array.index_menu);
         List<Basebean> data = new ArrayList<>();
         for (int i = 0; i < dataArr.length; i++) {

@@ -26,6 +26,10 @@
         <item>当前数据</item>
         <item>故障上报</item>
         <item>故障检索</item>
+        <item>设备属性</item>
+        <item>设备状态</item>
+        <item>网络配置</item>
+        <item>测量参数</item>
     </array>
     <!--了解景区的菜单-->
     <array name="index_scenic_menu">
