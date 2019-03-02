@@ -23,6 +23,7 @@ import com.android.daqsoft.androidbasics.base.BaseFragment;
 import com.android.daqsoft.androidbasics.base.IApplication;
 import com.android.daqsoft.androidbasics.common.Constant;
 import com.android.daqsoft.androidbasics.event.IndexYiBean;
+import com.android.daqsoft.androidbasics.event.StatusSerarch;
 import com.android.daqsoft.androidbasics.ui.ActivityWebView;
 import com.android.daqsoft.androidbasics.utils.ActivityUtils;
 import com.android.daqsoft.androidbasics.utils.ToastUtils;
@@ -219,6 +220,32 @@ public class IndexFragment extends BaseFragment implements OnBannerListener, Swi
                             initBanner();
                         } catch (Exception e) {
                             mBanner.setVisibility(View.GONE);
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+        OkHttpUtils.get()
+                .url(Constant.BASE_URL+"imec/getAllEvents")
+                .addParams("station_ID",IApplication.SP.getString("stationID"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        mTvMax.setText("0");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject object = JSONObject.parseObject(response);
+                            if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
+                                mTvMax.setText(object.getJSONArray("data").size()+"");
+                            }else {
+                                mTvMax.setText("0");
+                            }
+                        }catch (Exception e){
+                            mTvMax.setText("0");
                             e.printStackTrace();
                         }
                     }

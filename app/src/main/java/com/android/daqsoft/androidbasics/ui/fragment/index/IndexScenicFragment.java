@@ -168,7 +168,7 @@ public class IndexScenicFragment extends BaseFragment {
                                 start(IndexPoliceXqFragment.newInstance(stationName,deviceId));
                                 break;
                             case 7://游记攻略
-                                start(IndexScenicTravelsFragment.newInstance(deviceId));
+                                start(IndexScenicTravelsFragment.newInstance(deviceId,0));
                                 break;
                             case 8://设备属性
                                 start(SbsxFragment.newInstance(deviceId,deviceIP,devicePort,devideUsr,devicePwd,stationName,0));

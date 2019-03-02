@@ -70,14 +70,16 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
 
     private BaseQuickAdapter<StatusSerarch,BaseViewHolder> mAdapter;
     private String deviceId = "";
+    private int  mType = 0;
 
     /**
      *
      * @return 单例
      */
-    public static IndexScenicTravelsFragment newInstance(String deviceId_) {
+    public static IndexScenicTravelsFragment newInstance(String deviceId_,int type) {
         Bundle args = new Bundle();
         args.putString("deviceId",deviceId_);
+        args.putInt("mType",type);
         IndexScenicTravelsFragment fragment = new IndexScenicTravelsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -120,46 +122,90 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
 
     private void getData(){
         mRefreshLayout.setRefreshing(true);
-        OkHttpUtils.get()
-                .url("http://2h15419d06.51mypc.cn:24420/imec/getLastSixEvent")
-                .addParams("device_ID",deviceId)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        mViewAnimator.setDisplayedChild(1);
-                        mRefreshLayout.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        try {
+        if (mType==0){
+            OkHttpUtils.get()
+                    .url("http://2h15419d06.51mypc.cn:24420/imec/getLastSixEvent")
+                    .addParams("device_ID",deviceId)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            mViewAnimator.setDisplayedChild(1);
                             mRefreshLayout.setRefreshing(false);
-                            JSONObject object = JSONObject.parseObject(response);
-                            if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
-                                mViewAnimator.setDisplayedChild(0);
-                                JSONArray data = object.getJSONArray("data");
-                                List<StatusSerarch> mlist = new ArrayList<>();
-                                for (int i = 0; i < data.size(); i++) {
-                                    JSONObject obj = data.getJSONObject(i);
-                                    StatusSerarch bean = new StatusSerarch();
-                                    bean.setId(obj.getString("deviceID"));
-                                    bean.setPeople(obj.getString("submitPerson"));
-                                    bean.setStatus(obj.getString("eventStatus"));
-                                    bean.setTime(obj.getString("submitTime"));
-                                    bean.setType(obj.getString("eventType"));
-                                    mlist.add(bean);
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                mRefreshLayout.setRefreshing(false);
+                                JSONObject object = JSONObject.parseObject(response);
+                                if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
+                                    mViewAnimator.setDisplayedChild(0);
+                                    JSONArray data = object.getJSONArray("data");
+                                    List<StatusSerarch> mlist = new ArrayList<>();
+                                    for (int i = 0; i < data.size(); i++) {
+                                        JSONObject obj = data.getJSONObject(i);
+                                        StatusSerarch bean = new StatusSerarch();
+                                        bean.setId(obj.getString("deviceID"));
+                                        bean.setPeople(obj.getString("submitPerson"));
+                                        bean.setStatus(obj.getString("eventStatus"));
+                                        bean.setTime(obj.getString("submitTime"));
+                                        bean.setType(obj.getString("eventType"));
+                                        mlist.add(bean);
+                                    }
+                                    mAdapter.setNewData(mlist);
+                                }else {
+                                    mViewAnimator.setDisplayedChild(1);
                                 }
-                                mAdapter.setNewData(mlist);
-                            }else {
+                            }catch (Exception e){
+                                e.printStackTrace();
                                 mViewAnimator.setDisplayedChild(1);
                             }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            mViewAnimator.setDisplayedChild(1);
                         }
-                    }
-                });
+                    });
+        }else {
+            OkHttpUtils.get()
+                    .url(Constant.BASE_URL+"imec/getAllEvents")
+                    .addParams("station_ID",IApplication.SP.getString("stationID"))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            mViewAnimator.setDisplayedChild(1);
+                            mRefreshLayout.setRefreshing(false);
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                mRefreshLayout.setRefreshing(false);
+                                JSONObject object = JSONObject.parseObject(response);
+                                if (object.getIntValue("resultCode")==0&&object.getJSONArray("data").size()>0){
+                                    mViewAnimator.setDisplayedChild(0);
+                                    JSONArray data = object.getJSONArray("data");
+                                    List<StatusSerarch> mlist = new ArrayList<>();
+                                    for (int i = 0; i < data.size(); i++) {
+                                        JSONObject obj = data.getJSONObject(i);
+                                        StatusSerarch bean = new StatusSerarch();
+                                        bean.setId(obj.getString("deviceID"));
+                                        bean.setPeople(obj.getString("submitPerson"));
+                                        bean.setStatus(obj.getString("eventStatus"));
+                                        bean.setTime(obj.getString("submitTime"));
+                                        bean.setType(obj.getString("eventType"));
+                                        mlist.add(bean);
+                                    }
+                                    mAdapter.setNewData(mlist);
+                                }else {
+                                    mViewAnimator.setDisplayedChild(1);
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                mViewAnimator.setDisplayedChild(1);
+                            }
+                        }
+                    });
+        }
+
     }
     /**
      * 初始View
@@ -167,6 +213,7 @@ public class IndexScenicTravelsFragment extends BaseFragment implements SwipeRef
     private void initView() {
         try {
             deviceId = getArguments().getString("deviceId");
+            mType = getArguments().getInt("mType");
         }catch (Exception e){
             e.printStackTrace();
         }

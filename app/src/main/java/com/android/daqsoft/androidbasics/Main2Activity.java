@@ -142,7 +142,7 @@ public class Main2Activity extends SupportActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
-            loadRootFragment(R.id.fl_container, IndexScenicTravelsFragment.newInstance("3120IEGA4400"));
+            loadRootFragment(R.id.fl_container, IndexScenicTravelsFragment.newInstance("3120IEGA4400",1));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
